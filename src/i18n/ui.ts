@@ -2,8 +2,8 @@
  * Interface labels in English and Hindi.
  *
  * `fromDocs: true` means the Hindi wording is taken from the owner's docs (concept,
- * methodology, visual design). Every other Hindi label was written for the interface and
- * still needs review by a fluent reader (concept §9: "Mark any unreviewed Hindi as such").
+ * methodology, visual design). The other Hindi labels were written for the interface and
+ * were reviewed on 2026-11-15 at the owner's request (concept §9).
  */
 export interface Label {
   en: string;
@@ -29,19 +29,19 @@ export const UI = {
   claims: { en: 'Claims register', hi: 'दावों की समीक्षा', fromDocs: true },
   corrections: { en: 'Corrections', hi: 'सुधार' },
   glossary: { en: 'Glossary', hi: 'शब्दकोश', fromDocs: true },
-  about: { en: 'About & Ethics', hi: 'परिचय', fromDocs: true },
+  about: { en: 'About & Ethics', hi: 'परिचय और नैतिकता' },
   search: { en: 'Search', hi: 'खोज', fromDocs: true },
-  az: { en: 'A–Z index', hi: 'अनुक्रमणिका' },
+  az: { en: 'A–Z index', hi: 'वर्णानुक्रमणिका' },
   home: { en: 'Home', hi: 'मुखपृष्ठ', fromDocs: true },
-  menu: { en: 'Menu', hi: 'सूची' },
-  skip: { en: 'Skip to content', hi: 'सामग्री पर जाएँ' },
+  menu: { en: 'Menu', hi: 'मेनू' },
+  skip: { en: 'Skip to content', hi: 'मुख्य सामग्री पर जाएँ' },
   siteMap: { en: 'Site map', hi: 'साइट-मानचित्र' },
   grades: { en: 'Evidence grades', hi: 'प्रमाण-श्रेणियाँ', fromDocs: true },
   empty: { en: 'No entries yet.', hi: 'अभी कोई प्रविष्टि नहीं।' },
   pending: { en: 'Pending', hi: 'लंबित' },
   inPreparation: { en: 'In preparation', hi: 'तैयारी में' },
   sourcesHeading: { en: 'Sources', hi: 'स्रोत' },
-  openQuestions: { en: 'Open questions', hi: 'अनिर्णीत प्रश्न' },
+  openQuestions: { en: 'Open questions', hi: 'अनसुलझे प्रश्न' },
   imageDetails: { en: 'Image details', hi: 'चित्र विवरण', fromDocs: true },
   ourRendering: { en: 'Our rendering', hi: 'हमारा अनुवाद' },
   themeDark: { en: 'Dark', hi: 'गहरा' },
