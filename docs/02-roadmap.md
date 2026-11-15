@@ -52,6 +52,12 @@ pull request, then move to the next. The phases follow the "rings" in `00-concep
 > files and their records). Do not download or add any image yourself. Open a pull request
 > with screenshots.
 
+**Image search (can be done by Claude Code on your computer):**
+> Search Wikimedia Commons and museum open-access collections for the items in the worklist in
+> content/images/README.md. For each candidate, write a record file with status: candidate,
+> filling every field from the source page (write "not stated" where the page says nothing).
+> Do not download or add any image yet. Give me a list with links so I can approve them.
+
 **Before this phase:** collect images and fill one record per image (source, place, period,
 location, licence). Good starting places: museum open-access collections and Wikimedia
 Commons. Plates from Gopinatha Rao's *Elements of Hindu Iconography* are public domain.

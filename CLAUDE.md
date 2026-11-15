@@ -78,6 +78,13 @@ height for Devanāgarī. No horror/sensational imagery.
 - `research/` — the owner's research files. This is the ONLY source of religious content.
   Migrate it into content collections without changing wording. Never edit these files.
 
+## Owner's decisions (2026-11-15)
+- Home page shows real images of Śrī Baṭuka Bhairava and Mā Kālī (docs/03-visual-design.md §10).
+- Dedication page: only verbatim, sourced scripture. Never compose dedication or devotional text.
+- Deity galleries: main temples of each deity, identified from research/ files.
+- Frame: a real yantra ring drawn only from a yantra described in a cited text in research/.
+  Until then, a plain gold circle, not called a yantra.
+
 ## Decisions still open (ask the owner; do not assume)
 Mantra display style, site name/domain, licence for the site's text, Sabhā placement,
 moderators. Defaults until decided: mantras shown open with the dīkṣā note; working name

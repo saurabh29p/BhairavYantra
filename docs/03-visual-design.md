@@ -122,13 +122,18 @@ it leaves a visible placeholder until the owner supplies it.
   site stays fast on Indian mobile data.
 - No image is used as a background behind text.
 
-## 10. Decisions for the owner / स्वामी के निर्णय
+## 10. Owner's decisions (2026-11-15) / स्वामी के निर्णय
 
-1. **Home page darśana of Bhairava:** which image (a specific temple mūrti, sculpture or
-   painting you love). This sets the tone of the whole site.
-2. **Dedication text and maṅgala verse:** your words, and the verse with its source.
-3. **Your own images:** any temple photographs you have taken or can take (with the temple's
-   permission), or paintings you own the rights to.
-4. **Frame style:** toraṇa arch (warmer, temple-like) or yantra ring (cleaner, geometric).
-5. **Mood references:** any sites, books, temples or artworks whose feeling you want the
-   site to have.
+1. **Home page darśana:** real images of **Śrī Baṭuka Bhairava** and **Mā Kālī**, side by
+   side in the bindu area of the home page (two medallions in one shrine frame). Images to be
+   sourced per `content/images/README.md`.
+2. **Dedication:** **nothing composed.** The Samarpaṇa page shows only verses quoted verbatim
+   from scripture, each with text, edition, chapter/verse and grade, chosen from the research
+   files. No connecting prose in the site's own voice beyond the page title and source lines.
+   Until a verse is sourced in `research/`, the page shows a visible "pending" placeholder.
+3. **Images:** photographs of the **main temples of each deity**, with the temple's
+   identification taken from the research files.
+4. **Frame:** a **real yantra ring**, drawn exactly from a yantra described in a cited text
+   (e.g. the Baṭuka Bhairava yantra as a named text gives it). The yantra-ring frame is not
+   drawn until that source is in `research/`; until then, use a plain single gold circle and
+   do not call it a yantra.
