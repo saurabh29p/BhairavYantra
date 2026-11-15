@@ -7,7 +7,6 @@
 import { getCollection, getEntry } from 'astro:content';
 import CitationText from '../../components/CitationText.astro';
 import PageHeading from '../../components/PageHeading.astro';
-import Pending from '../../components/Pending.astro';
 import { UI } from '../../i18n/ui';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { GRADE_LABEL } from '../../schemas/common';
@@ -28,7 +27,7 @@ const fieldLabel = { viniyoga: 'Viniyoga', rsi: 'Ṛṣi', chandas: 'Chandas', d
   <PageHeading en={sourceLine} hi={grantha?.data.name_sa} hiLang="sa" />
   <aside class="diksa-note" aria-label="Note on dīkṣā">
     <p lang="en">Recorded from {sourceLine}. Traditionally, mantras are received through dīkṣā from a qualified guru; this page documents what the text says and is not a substitute for that.</p>
-    <p><Pending what="Hindi wording of the fixed dīkṣā note (concept §8.2 gives the English only)" /></p>
+    <p lang="hi">{sourceLine} से उद्धृत। परंपरा के अनुसार मंत्र योग्य गुरु से दीक्षा द्वारा प्राप्त किए जाते हैं; यह पृष्ठ केवल यह दर्ज करता है कि ग्रंथ क्या कहता है, और दीक्षा का विकल्प नहीं है।</p>
   </aside>
   <p class="sa-block" lang="sa">{m.text_sa}</p>
   {fields.length > 0 && (

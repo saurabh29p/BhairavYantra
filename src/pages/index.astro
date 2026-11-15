@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Bi from '../components/Bi.astro';
-import Pending from '../components/Pending.astro';
 import { NAV } from '../data/nav';
 import { SITE, UI } from '../i18n/ui';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -24,7 +23,12 @@ const counts: Record<string, number> = {
       library, encyclopedia and, later, community on Bhairava, the Bhairavīs and the Daśa Mahāvidyās,
       presented as a yantra-form map. Every statement carries its source and an evidence grade.
     </p>
-    <p><Pending what="Hindi description of the site, in the owner's words" /></p>
+    <!-- Hindi translation of the README wording above. -->
+    <p class="lede" lang="hi">
+      भैरव, भैरवियों और दश महाविद्याओं पर एक द्विभाषी (हिंदी + अंग्रेज़ी; संस्कृत देवनागरी और IAST में)
+      ग्रंथालय, विश्वकोश और आगे चलकर समुदाय, जो यंत्र-रूप मानचित्र के रूप में प्रस्तुत है।
+      हर कथन के साथ उसका स्रोत और प्रमाण-श्रेणी दी गई है।
+    </p>
   </section>
 
   <section class="map-placeholder" aria-labelledby="map-heading">
