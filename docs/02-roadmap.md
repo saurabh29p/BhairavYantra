@@ -9,7 +9,8 @@ pull request, then move to the next. The phases follow the "rings" in `00-concep
 **Prompt:**
 > Read CLAUDE.md, docs/00-concept.md and docs/01-methodology-and-sources.md. Set up the Astro
 > project (TypeScript strict, Content Collections, MDX), with Zod schemas for every content
-> type in concept §4 and a build that fails on any claim without a citation and grade. Add
+> type in concept §4, including the Image schema in §4.7A (the build must fail on an image
+> with no source, period, licence or attribution) and a build that fails on any claim without a citation and grade. Add
 > the base layout, fonts (Devanāgarī + IAST), light/dark design tokens from CLAUDE.md, plain
 > navigation, and CI (build, schema check, link check, accessibility). No religious content
 > yet, only empty-state templates. Open a pull request with screenshots.
@@ -41,6 +42,30 @@ pull request, then move to the next. The phases follow the "rings" in `00-concep
 > Migrate research/02-ashta-bhairavas.md and research/09-dasha-mahavidyas.md the same way.
 > Keep their draft status banners and ⚠ items; add every ⚠ item to the claims register.
 > Wire them to the aṣṭadala and ten-direction slots. Open a pull request.
+
+## Phase 4A — Deity images / देवताओं के चित्र
+**Prompt:**
+> Build the DarshanHero, DeityGallery and ViewingRoom components following
+> docs/03-visual-design.md §2–§3 and concept §7A: bilingual caption,
+> credit line, "Image details" record, and galleries ordered by period. Use astro:assets for
+> optimised responsive images. Add the images listed in content/images/ (I will supply the
+> files and their records). Do not download or add any image yourself. Open a pull request
+> with screenshots.
+
+**Image search (can be done by Claude Code on your computer):**
+> Search Wikimedia Commons and museum open-access collections for the items in the worklist in
+> content/images/README.md. For each candidate, write a record file with status: candidate,
+> filling every field from the source page (write "not stated" where the page says nothing).
+> Do not download or add any image yet. Give me a list with links so I can approve them.
+
+**Before this phase:** collect images and fill one record per image (source, place, period,
+location, licence). Good starting places: museum open-access collections and Wikimedia
+Commons. Plates from Gopinatha Rao's *Elements of Hindu Iconography* are public domain.
+
+## Phase 4B — Dedication page / समर्पण
+**Prompt:**
+> Build the Samarpaṇa page and footer link following docs/03-visual-design.md §8, using the
+> dedication text and maṅgala verse in content/samarpana.md (I will write it).
 
 ## Phase 5 — Deploy / प्रकाशन
 **Prompt:**

@@ -148,6 +148,16 @@ Every page is one of these types. Fields marked **required** must be present for
 - `statement`, `who_claims_it` (site, book, tradition), `status` (unverified / disputed / refuted / verified), `evidence_for[]`, `evidence_against[]`, `pages_affected[]`
 - Public page: "Claims under review / दावों की समीक्षा". This is one of the site's strongest features: it shows readers the checking in progress.
 
+### 4.7A Image
+- `file` (stored in the repo, optimised), `alt_en`, `alt_hi` (required)
+- `depicts[]`: Devatā ids, plus `identified_by` (source / ours) and `identification_note`
+- `object_type`, `material`, `origin_place`, `period` + `period_grade` (required)
+- `current_location` (temple or museum) and `accession_number` where applicable
+- `source_url`, `creator`, `retrieved_on` (required)
+- `licence`, `licence_url`, `attribution_text` (required; build fails without them)
+- `in_worship`, `inner_shrine`, `temple_permission` (required flags)
+- `permission_file` (required when the licence is "permission")
+
 ### 4.8 Citation and Edition
 Every citation resolves to an Edition entry in a single bibliography file, so an edition is described once and cited everywhere. Displayed as a short form inline ("KūP Uttara 31.30 · A‑w") that expands to full details and a clickable link.
 
@@ -199,10 +209,50 @@ This is a real legal risk, not just courtesy.
 
 - **Sanskrit source texts** of old works are public domain. **Modern critical editions** can still carry rights in their editorial work (apparatus, introductions, and arguably the constituted text in some jurisdictions). Quoting verses with citation is normal scholarly practice; reproducing a whole edition is not safe.
 - **Modern translations are copyrighted.** This includes the Motilal Banarsidass Purāṇa translations, Gita Press Hindi translations, Kinsley, Hatley, and most material on Wisdom Library. Policy: **use our own translations**; quote published translations only in short excerpts with full credit when the exact wording matters; link to the source rather than copying it.
-- **Images.** Temple and deity photographs belong to their photographers or temples, and some temples forbid photography of the inner shrine. Use only images with a clear licence (own photos, public domain, Creative Commons with attribution, or written permission), and record the licence in each image's metadata.
+- **Images.** Real images of the deities are a core part of the site (see §7A). Temple and deity photographs belong to their photographers or temples, and some temples forbid photography of the inner shrine. Use only images with a clear licence (own photos, public domain, Creative Commons with attribution, museum open access, or written permission), and record the licence in each image's metadata.
 - **AI-generated deity images.** Recommendation: **do not use them** for deities. They often get iconography wrong (wrong number of arms, attributes, vehicle), which contradicts the site's accuracy standard, and many devotees consider them inappropriate. Use traditional sources (public-domain paintings, temple images with permission) or clean line-drawn iconographic diagrams that are explicitly based on a cited dhyāna verse.
 - **Old public-domain books** (e.g., Gopinatha Rao, 1916) can be quoted and their plates reproduced, which is valuable for iconography.
 - The site's own text: choose a licence (e.g., CC BY-SA 4.0 for our writing) so others can reuse it with credit. Decide this before launch.
+
+---
+
+## 7A. Real images of the deities / देवताओं के वास्तविक चित्र
+
+Every deity page should show **real, historical images**: temple mūrtis, stone and bronze sculptures, manuscript paintings, pāṭa and thangka paintings, and plates from old iconography books. Treated as evidence, they are one of the strongest parts of the site, because they show how each form was actually depicted, in which place and century.
+
+### Which images qualify
+| Kind | Examples of where to find them | Licence situation |
+|---|---|---|
+| Museum objects (sculpture, bronze, painting) | Museum open-access collections, e.g. The Metropolitan Museum of Art (Open Access, CC0), the Cleveland Museum of Art (Open Access, CC0), Rijksmuseum; the Los Angeles County Museum of Art and the Art Institute of Chicago publish many public-domain images | Usually public domain or CC0; check each object page |
+| Wikimedia Commons photographs | Temple sculptures, Kathmandu valley Bhairavas, Aṣṭa Bhairava temples, museum photos | Each file has its own licence (often CC BY-SA, which requires attribution and share-alike); some files are wrongly licensed, so check the uploader and source |
+| Plates from old books | T. A. Gopinatha Rao, *Elements of Hindu Iconography* (1914–16); other pre-1929 publications | Public domain |
+| Manuscript illustrations | Digitised collections of libraries and museums | Depends on the holding institution; many are public domain, some restrict reuse |
+| Your own photographs | Temple visits | Yours, **but** only where the temple allows photography; get permission for the garbhagṛha (inner shrine) |
+| Photographs by others | Photographers, temples, scholars | Only with written permission, stored in the repo |
+
+*(Museum licence details are general knowledge, grade C; confirm the licence on each object page before use.)*
+
+**Not allowed:** AI-generated or AI-"enhanced" deity images, images copied from Google results or social media, calendar/poster art still under copyright, and watermarked stock photos.
+
+### What every image must record
+An image without a source is treated like a claim without a source: the build rejects it. Required fields (see the **Image** type in §4):
+- **What it shows:** deity/form as identified **by the holding institution or source**, and our identification if different (with the reason, e.g. matching attributes to a dhyāna verse).
+- **Object facts:** type (mūrti, relief, bronze, painting, manuscript folio, book plate, photograph), material, **place of origin**, **period/date** (with grade, since most dates are estimates), current location (temple or museum, with accession number).
+- **Source:** URL of the source page, photographer/creator, and the date we downloaded it.
+- **Licence:** exact licence name and link, and the attribution text to display.
+- **Sensitivity flags:** in active worship (yes/no), inner-shrine photo (yes/no), temple permission (yes/no/not needed).
+
+### How images are shown
+- Caption under every image in English and Hindi: what it is, where it is, its period, and the credit line.
+- An "Image details" link opens the full record (source, licence, identification evidence).
+- A **gallery per deity**, ordered by period, so readers can see how the form developed. Where identification is uncertain, the caption says so ("identified by the museum as Bhairava; attributes match Baṭuka").
+- Images are respectful: no cropping that cuts the deity's head or feet, no filters or colour "enhancement", no use as decorative backgrounds.
+
+### Choices only you can make
+1. **Photos of consecrated mūrtis in worship.** Many temples and devotees hold that a consecrated mūrti should not be photographed or shown out of context. Recommendation: use them only where the temple allows photography, and prefer museum objects and book plates for the rest.
+2. **Hero image for each deity page:** a real object (recommended), or a clean line drawing based on the dhyāna verse.
+3. **Your own temple photography:** whether you (or others) will photograph temples for the site, which would need a simple permission form.
+4. **Share-alike licences:** CC BY-SA images are fine, but share-alike applies to the image (and edits of it). It fits with the CC BY-SA licence recommended for the site's own text (§13).
 
 ---
 
@@ -373,7 +423,8 @@ Chosen for: content-heavy, rarely changing, must be fast in India on mobile data
 5. **Licence for the site's own writing** (CC BY-SA 4.0 recommended).
 6. **Community moderators:** who will moderate, and from when. The community should not open without them.
 7. **Sabhā placement:** a fifth gate on the bhūpura, or the space around the yantra (§10.1).
-8. **Ṣaṭkoṇa ring:** include Śiva–Śakti pairings as their own ring, or fold them into deity pages until file 10 is verified (recommended: fold in for now).
+8. **Deity images:** photos of mūrtis in worship, hero image style, own temple photography (§7A).
+9. **Ṣaṭkoṇa ring:** include Śiva–Śakti pairings as their own ring, or fold them into deity pages until file 10 is verified (recommended: fold in for now).
 
 ---
 
@@ -402,10 +453,15 @@ Full concept: docs/00-concept.md. Research rules: docs/01-methodology-and-source
 4. Never label a text "lost", "recovered" or "ancient" unless its registry entry has the
    matching status and evidence (see concept §5).
 5. No AI-generated images of deities. No audio. No ads, trackers or shop features.
+6. Real deity images (temple mūrtis, sculptures, manuscript paintings, old book plates)
+   are wanted, but every image needs an Image record with source, place, period,
+   current location, licence and attribution (concept §4.7A, §7A). Never add an image
+   that has no such record, and never download images yourself without the owner
+   approving the source and licence.
 
 ## Stack
 - Astro (latest stable) + Content Collections + MDX, TypeScript strict.
-- Zod schemas for: devata, grantha, passage, mantra, person, place, claim, edition.
+- Zod schemas for: devata, grantha, passage, mantra, person, place, claim, edition, image.
   Required fields as in concept §4.
 - Pagefind for search, with a synonyms file for spelling variants
   (Bhairav/Bhairava/भैरव/Bhairo …) and IAST→ASCII folding.

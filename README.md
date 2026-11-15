@@ -6,6 +6,7 @@ Every statement carries its source and an evidence grade.
 
 - Concept: [docs/00-concept.md](docs/00-concept.md)
 - Research method and evidence grades: [docs/01-methodology-and-sources.md](docs/01-methodology-and-sources.md)
+- Visual design and deity imagery: [docs/03-visual-design.md](docs/03-visual-design.md)
 - Build order: [docs/02-roadmap.md](docs/02-roadmap.md)
 - Research files: [research/](research/)
 - Instructions for Claude Code: [CLAUDE.md](CLAUDE.md)

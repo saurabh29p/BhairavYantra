@@ -69,6 +69,8 @@ A set of eight dhyāna verses, one per Bhairava, circulates as the *Aṣṭabhai
 
 ⚠ **Grade D.** No source text is named. The online text has visible copying errors (e.g., "शुनवाहनन्त्रिनयन"), so the full verses will be given only after we find a printed edition to check them against. Note also that these dhyānas do **not** match the colours in §2. For example, the Asitāṅga dhyāna says "red-limbed" (रक्ताङ्ग), while W says white and N says navy. The Caṇḍa dhyāna gives 20 arms and 5 faces (द्विगुणदशभुजं पञ्चवक्त्र), while W gives four arms. And the Saṃhāra dhyāna gives 12 hands, while W gives ten.
 
+**Added 2026-11-15:** the "Kapāla" dhyāna in this set (वन्दे बालं स्फटिकसदृशं…) is the same verse that is given elsewhere as the **sāttvika dhyāna of Baṭuka Bhairava**. The "Krodha" dhyāna (उद्यद्भास्कररूपनिभं…) closely matches the opening of Baṭuka's **rājasa dhyāna** (उद्यद्भास्करसन्निभं…). See [20-dedication-verses.md](20-dedication-verses.md). So this circulating Aṣṭa Bhairava set seems to reuse Baṭuka dhyānas, which is one more reason to treat it as unverified. ⚠
+
 ---
 
 ## 4. Other lists of eight that differ / भिन्न सूचियाँ

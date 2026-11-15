@@ -18,10 +18,15 @@ Full concept: docs/00-concept.md. Research rules: docs/01-methodology-and-source
 4. Never label a text "lost", "recovered" or "ancient" unless its registry entry has the
    matching status and evidence (see concept §5).
 5. No AI-generated images of deities. No audio. No ads, trackers or shop features.
+6. Real deity images (temple mūrtis, sculptures, manuscript paintings, old book plates)
+   are wanted, but every image needs an Image record with source, place, period,
+   current location, licence and attribution (concept §4.7A, §7A). Never add an image
+   that has no such record, and never download images yourself without the owner
+   approving the source and licence.
 
 ## Stack
 - Astro (latest stable) + Content Collections + MDX, TypeScript strict.
-- Zod schemas for: devata, grantha, passage, mantra, person, place, claim, edition.
+- Zod schemas for: devata, grantha, passage, mantra, person, place, claim, edition, image.
   Required fields as in concept §4.
 - Pagefind for search, with a synonyms file for spelling variants
   (Bhairav/Bhairava/भैरव/Bhairo …) and IAST→ASCII folding.
@@ -48,6 +53,8 @@ Full concept: docs/00-concept.md. Research rules: docs/01-methodology-and-source
   Corrections, A–Z index, and empty-state templates for every content type.
 
 ## Design tokens
+Full guide: docs/03-visual-design.md. Never alter deity images (no filters, AI upscaling or
+crops through head or feet). Never write the dedication (samarpaṇa) text yourself.
 Night blue-black background in dark mode, ash-grey neutrals, one vermilion accent,
 gold for yantra lines only. Light and dark modes designed separately. Generous line
 height for Devanāgarī. No horror/sensational imagery.
@@ -64,10 +71,19 @@ height for Devanāgarī. No horror/sensational imagery.
   building anything.
 - `docs/01-methodology-and-sources.md` — evidence grades (A, A-w, B, C, D, ⚠) and rules.
   These are the law for all content.
+- `docs/03-visual-design.md` — the visual style and how deity images are presented
+  (darśana hero, gallery, colour, typography, dedication page). Follow it for every UI task.
 - `docs/02-roadmap.md` — the build order, phase by phase. Work on one phase at a time and
   only when the owner asks.
 - `research/` — the owner's research files. This is the ONLY source of religious content.
   Migrate it into content collections without changing wording. Never edit these files.
+
+## Owner's decisions (2026-11-15)
+- Home page shows real images of Śrī Baṭuka Bhairava and Mā Kālī (docs/03-visual-design.md §10).
+- Dedication page: only verbatim, sourced scripture. Never compose dedication or devotional text.
+- Deity galleries: main temples of each deity, identified from research/ files.
+- Frame: a real yantra ring drawn only from a yantra described in a cited text in research/.
+  Until then, a plain gold circle, not called a yantra.
 
 ## Decisions still open (ask the owner; do not assume)
 Mantra display style, site name/domain, licence for the site's text, Sabhā placement,
