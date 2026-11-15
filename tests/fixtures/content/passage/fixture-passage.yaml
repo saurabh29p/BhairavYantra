@@ -1,0 +1,11 @@
+text_sa: |-
+  परीक्षण पाठ पहली पंक्ति
+  परीक्षण पाठ दूसरी पंक्ति
+iast: parīkṣaṇa pāṭha
+translation_en: { text: Fixture translation., translator: ours }
+translation_hi: { text: परीक्षण अनुवाद।, translator: Fixture Translator, licence: Fixture permission }
+location: { grantha: fixture-text, edition: fixture-print, chapter: "3", verse: "10" }
+grade: A
+variant_readings:
+  - reading_sa: परीक्षण पाठभेद
+    source: { key: fixture-study, location: p. 12, grade: C }

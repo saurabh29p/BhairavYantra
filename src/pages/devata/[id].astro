@@ -1,0 +1,118 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Bi from '../../components/Bi.astro';
+import CitationList from '../../components/CitationList.astro';
+import CitationText from '../../components/CitationText.astro';
+import EntryMeta from '../../components/EntryMeta.astro';
+import OpenQuestions from '../../components/OpenQuestions.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import Pending from '../../components/Pending.astro';
+import CitationBadge from '../../components/CitationBadge.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('devata')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const name = async (id: string) => (await getEntry('devata', id))?.data;
+const consorts = await Promise.all(d.consorts.map(async (r) => ({ ...r, d: await name(r.devata) })));
+const related = await Promise.all(d.related.map(async (r) => ({ ...r, d: await name(r.devata) })));
+const mantras = await Promise.all(d.mantras.map((id) => getEntry('mantra', id)));
+const places = await Promise.all(d.places.map((id) => getEntry('place', id)));
+---
+<BaseLayout title={d.name_iast} titleHi={d.name_sa}>
+  <PageHeading en={d.name_iast} hi={d.name_sa} hiLang="sa" />
+  <p><span class="tag">{d.type}</span></p>
+  <EntryMeta status={d.status} lastReviewed={d.last_reviewed} />
+
+  <div class="parallel">
+    <p lang="en">{d.summary_en}</p>
+    <p lang="hi">{d.summary_hi}</p>
+  </div>
+
+  <Content components={{ Pending, CitationBadge }} />
+
+  {d.yantra_position && (
+    <p class="muted">
+      Yantra-form map: {d.yantra_position.layer}, {d.yantra_position.slot} — follows {d.yantra_position.variant}
+      {d.yantra_position.source && <> (<CitationText c={d.yantra_position.source} />)</>}
+    </p>
+  )}
+
+  {d.name_variants.length > 0 && (
+    <section>
+      <h2>Name variants</h2>
+      <ul>{d.name_variants.map((v) => <li>{v.name} — <CitationText c={v.source} /></li>)}</ul>
+    </section>
+  )}
+
+  {d.iconography && d.iconography.attributes.length > 0 && (
+    <section>
+      <h2>Iconography</h2>
+      <table>
+        <thead><tr><th scope="col">Attribute</th><th scope="col">As given by each source</th></tr></thead>
+        <tbody>
+          {d.iconography.attributes.map((row) => (
+            <tr>
+              <th scope="row">{row.attribute}</th>
+              <td><ul>{row.values.map((v) => <li>{v.value} — <CitationText c={v.source} /></li>)}</ul></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  )}
+
+  {d.iconography && d.iconography.dhyana.length > 0 && (
+    <section>
+      <h2>Dhyāna</h2>
+      <ul>{d.iconography.dhyana.map((id) => <li><a href={`/passage/${id}/`}>{id}</a></li>)}</ul>
+    </section>
+  )}
+
+  {(consorts.length > 0 || related.length > 0) && (
+    <section>
+      <h2>Related forms</h2>
+      <ul>
+        {[...consorts.map((r) => ({ ...r, kind: 'consort' })), ...related.map((r) => ({ ...r, kind: r.relation ?? 'related' }))].map((r) => (
+          <li>
+            <a href={`/devata/${r.devata}/`}>{r.d ? <><span lang="sa">{r.d.name_sa}</span> · <span lang="sa-Latn">{r.d.name_iast}</span></> : r.devata}</a>
+            {' '}({r.kind}) — <CitationText c={r.source} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {mantras.length > 0 && (
+    <section>
+      <h2><Bi label={UI.mantra} /></h2>
+      <ul>{mantras.map((m, i) => m && <li><a href={`/mantra/${d.mantras[i]}/`} lang="sa">{m.data.text_sa}</a></li>)}</ul>
+    </section>
+  )}
+
+  {d.yantras.length > 0 && (
+    <section>
+      <h2>Yantras</h2>
+      <ul>{d.yantras.map((y) => <li>{y.label} — <CitationText c={y.source} />{y.image && <> · <a href={`/images/${y.image}/`}><Bi label={UI.imageDetails} /></a></>}</li>)}</ul>
+    </section>
+  )}
+
+  {places.length > 0 && (
+    <section>
+      <h2><Bi label={UI.place} /></h2>
+      <ul>{places.map((p, i) => p && <li><a href={`/parampara/place/${d.places[i]}/`}>{p.data.name_iast}</a></li>)}</ul>
+    </section>
+  )}
+
+  <section>
+    <h2><Bi label={UI.sourcesHeading} /></h2>
+    <CitationList items={d.textual_sources} />
+  </section>
+
+  <OpenQuestions items={d.open_questions} />
+</BaseLayout>

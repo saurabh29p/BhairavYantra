@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import CitationList from '../../components/CitationList.astro';
+import CitationText from '../../components/CitationText.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('claim')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const c = entry.data;
+---
+<BaseLayout title={`${UI.claims.en}: ${entry.id}`} titleHi={UI.claims.hi}>
+  <PageHeading en={UI.claims.en} hi={UI.claims.hi} />
+  <div class="parallel">
+    {c.statement_en && <p lang="en" class="lede">{c.statement_en}</p>}
+    {c.statement_hi && <p lang="hi" class="lede">{c.statement_hi}</p>}
+  </div>
+  <p><span class="tag">{c.status}</span> <span class="muted">Opened {c.opened_on}{c.last_reviewed && <>, last reviewed {c.last_reviewed}</>}</span></p>
+  <h2>Who makes the claim</h2>
+  <ul>
+    {c.who_claims_it.map((w) => (
+      <li>{w.url ? <a href={w.url}>{w.name}</a> : w.name} ({w.kind}){w.source && <> — <CitationText c={w.source} /></>}</li>
+    ))}
+  </ul>
+  <h2>Evidence for</h2>
+  {c.evidence_for.length > 0 ? <CitationList items={c.evidence_for} /> : <p class="muted">None recorded.</p>}
+  <h2>Evidence against</h2>
+  {c.evidence_against.length > 0 ? <CitationList items={c.evidence_against} /> : <p class="muted">None recorded.</p>}
+  {c.pages_affected.length > 0 && (
+    <>
+      <h2>Pages affected</h2>
+      <ul>{c.pages_affected.map((p) => <li><a href={p}>{p}</a></li>)}</ul>
+    </>
+  )}
+  <p><a href="/claims/">{UI.claims.en}</a></p>
+</BaseLayout>

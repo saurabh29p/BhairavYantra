@@ -1,0 +1,18 @@
+---
+import { getCollection } from 'astro:content';
+import Bi from '../../components/Bi.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const persons = await getCollection('person');
+const places = await getCollection('place');
+---
+<BaseLayout title={UI.parampara.en} titleHi={UI.parampara.hi}>
+  <PageHeading en={UI.parampara.en} hi={UI.parampara.hi} />
+  <p class="muted"><span lang="en">Traditions, sādhakas and places.</span></p>
+  <ul class="entry-list">
+    <li><a href="/parampara/person/"><Bi label={UI.person} /></a> <span class="muted">({persons.length})</span></li>
+    <li><a href="/parampara/place/"><Bi label={UI.place} /></a> <span class="muted">({places.length})</span></li>
+  </ul>
+</BaseLayout>

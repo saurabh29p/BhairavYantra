@@ -1,0 +1,47 @@
+---
+/** A–Z index of every library entry, grouped by first letter after IAST folding. */
+import { getCollection } from 'astro:content';
+import EmptyState from '../../components/EmptyState.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { byIast, indexLetter } from '../../lib/text';
+
+interface Item { href: string; latin: string; sa?: string; kind: string }
+const items: Item[] = [
+  ...(await getCollection('devata')).map((e) => ({ href: `/devata/${e.id}/`, latin: e.data.name_iast, sa: e.data.name_sa, kind: UI.devata.en })),
+  ...(await getCollection('grantha')).map((e) => ({ href: `/grantha/${e.id}/`, latin: e.data.name_iast, sa: e.data.name_sa, kind: UI.grantha.en })),
+  ...(await getCollection('person')).map((e) => ({ href: `/parampara/person/${e.id}/`, latin: e.data.name_iast, sa: e.data.name_sa, kind: UI.person.en })),
+  ...(await getCollection('place')).map((e) => ({ href: `/parampara/place/${e.id}/`, latin: e.data.name_iast, sa: e.data.name_sa, kind: UI.place.en })),
+].sort(byIast((i) => i.latin));
+
+const groups = new Map<string, Item[]>();
+for (const it of items) {
+  const k = indexLetter(it.latin);
+  groups.set(k, [...(groups.get(k) ?? []), it]);
+}
+const letters = [...groups.keys()];
+---
+<BaseLayout title={UI.az.en} titleHi={UI.az.hi}>
+  <PageHeading en={UI.az.en} hi={UI.az.hi} />
+  {items.length === 0 ? (
+    <EmptyState noteEn="Deities, texts, persons and places appear here as they are added." />
+  ) : (
+    <>
+      <nav aria-label="Letters"><p>{letters.map((l) => <><a href={`#letter-${l}`}>{l}</a>{' '}</>)}</p></nav>
+      {letters.map((l) => (
+        <section aria-labelledby={`letter-${l}`}>
+          <h2 id={`letter-${l}`}>{l}</h2>
+          <ul class="entry-list">
+            {groups.get(l)!.map((it) => (
+              <li>
+                <a href={it.href}><span lang="sa-Latn">{it.latin}</span>{it.sa && <> · <span lang="sa">{it.sa}</span></>}</a>
+                <span class="muted"> — {it.kind}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </>
+  )}
+</BaseLayout>

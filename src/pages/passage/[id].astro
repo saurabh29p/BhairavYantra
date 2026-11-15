@@ -1,0 +1,70 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import CitationText from '../../components/CitationText.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GRADE_LABEL } from '../../schemas/common';
+
+export async function getStaticPaths() {
+  return (await getCollection('passage')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const p = entry.data;
+const grantha = await getEntry('grantha', p.location.grantha);
+const edition = await getEntry('edition', p.location.edition);
+const where = [p.location.division, `${p.location.chapter}.${p.location.verse}`].filter(Boolean).join(' ');
+const title = `${grantha?.data.name_iast ?? p.location.grantha} ${where}`;
+const translator = (t: string) => (t === 'ours' ? `${UI.ourRendering.en} · ${UI.ourRendering.hi}` : t);
+---
+<BaseLayout title={title} titleHi={grantha?.data.name_sa}>
+  <PageHeading en={title} hi={grantha?.data.name_sa} hiLang="sa" />
+  <figure class="passage">
+    <blockquote>
+      <p class="sa-block" lang="sa"><span class="script-label" lang="hi">सं.</span>{p.text_sa}</p>
+      {p.iast && <p lang="sa-Latn">{p.iast}</p>}
+    </blockquote>
+    <figcaption>
+      <a href={`/grantha/${p.location.grantha}/`}>{grantha?.data.name_iast ?? p.location.grantha}</a> {where}{' '}
+      · <a href={`/sources/bibliography/#${p.location.edition}`}>{edition?.data.short ?? edition?.data.title}</a>{' '}
+      · <strong>{GRADE_LABEL[p.grade]}</strong>
+      {p.where_we_read_it && <> · <a href={p.where_we_read_it}>where we read it</a></>}
+    </figcaption>
+  </figure>
+  <div class="parallel">
+    {p.translation_en && (
+      <div>
+        <p lang="en">{p.translation_en.text}</p>
+        <p class="muted">{translator(p.translation_en.translator)}{p.translation_en.licence && <> · {p.translation_en.licence}</>}</p>
+      </div>
+    )}
+    {p.translation_hi && (
+      <div>
+        <p lang="hi"><span class="script-label">हि.</span>{p.translation_hi.text}</p>
+        <p class="muted">{translator(p.translation_hi.translator)}{p.translation_hi.licence && <> · {p.translation_hi.licence}</>}</p>
+      </div>
+    )}
+  </div>
+  {p.variant_readings.length > 0 && (
+    <section>
+      <h2>Variant readings</h2>
+      <ul>{p.variant_readings.map((v) => <li><span lang="sa">{v.reading_sa}</span> — <CitationText c={v.source} />{v.note && <> · {v.note}</>}</li>)}</ul>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .passage blockquote {
+    margin: 0 0 var(--space-3);
+    padding-inline-start: var(--space-4);
+    border-inline-start: 2px solid var(--gold);
+  }
+  .passage figcaption {
+    font-size: 0.92rem;
+    margin-bottom: var(--space-6);
+  }
+  .passage .sa-block {
+    white-space: pre-line;
+  }
+</style>

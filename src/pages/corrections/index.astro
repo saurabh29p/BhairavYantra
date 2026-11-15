@@ -1,0 +1,11 @@
+---
+import PageHeading from '../../components/PageHeading.astro';
+import Pending from '../../components/Pending.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title={UI.corrections.en} titleHi={UI.corrections.hi}>
+  <PageHeading en={UI.corrections.en} hi={UI.corrections.hi} />
+  <p class="muted"><span lang="en">The public corrections log; Git history is the audit trail (concept §6.6).</span></p>
+  <Pending block what="Corrections log and the “Suggest a correction (with source)” channel (Phase 1)" />
+</BaseLayout>

@@ -1,0 +1,9 @@
+statement_en: Fixture claim statement.
+statement_hi: परीक्षण दावा।
+who_claims_it:
+  - { name: Fixture website, kind: site, url: https://example.org/claim }
+status: disputed
+evidence_for: [{ key: fixture-site, location: "5.1", grade: A-w }]
+evidence_against: [{ key: fixture-study, location: p. 13, grade: C }]
+pages_affected: [/devata/fixture-devata/]
+opened_on: 2026-11-15

@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import CollectionList from '../../components/CollectionList.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = await getCollection('mantra');
+const items = entries.map((e) => ({
+  href: `/mantra/${e.id}/`,
+  latin: `${e.data.source_text.grantha} ${e.data.source_text.location}`,
+  note: `Grade ${e.data.grade}`,
+}));
+---
+<BaseLayout title={UI.mantra.en} titleHi={UI.mantra.hi}>
+  <PageHeading en={UI.mantra.en} hi={UI.mantra.hi} />
+  <p class="muted"><span lang="en">Recorded as the source texts give them, each with its source and attribution check.</span></p>
+  <CollectionList items={items} />
+</BaseLayout>

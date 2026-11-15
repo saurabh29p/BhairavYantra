@@ -1,0 +1,12 @@
+---
+import Bi from '../../components/Bi.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import Pending from '../../components/Pending.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title={UI.search.en} titleHi={UI.search.hi}>
+  <PageHeading en={UI.search.en} hi={UI.search.hi} />
+  <Pending block what="Pagefind search with spelling synonyms and IAST→ASCII folding (Phase 1)" />
+  <p><a href="/a-z/"><Bi label={UI.az} /></a></p>
+</BaseLayout>

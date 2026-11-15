@@ -1,0 +1,91 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Bi from '../../components/Bi.astro';
+import CitationBadge from '../../components/CitationBadge.astro';
+import CitationList from '../../components/CitationList.astro';
+import CitationText from '../../components/CitationText.astro';
+import EntryMeta from '../../components/EntryMeta.astro';
+import OpenQuestions from '../../components/OpenQuestions.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import Pending from '../../components/Pending.astro';
+import { TEXT_STATUS_LABEL } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('grantha')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const g = entry.data;
+const { Content } = await render(entry);
+const status = TEXT_STATUS_LABEL[g.text_status];
+const editions = await Promise.all(g.editions.map((id) => getEntry('edition', id)));
+---
+<BaseLayout title={g.name_iast} titleHi={g.name_sa}>
+  <PageHeading en={g.name_iast} hi={g.name_sa} hiLang="sa" />
+  <p>
+    <span class="tag">{g.genre}</span>
+    <span class="tag" data-text-status={g.text_status}><Bi label={status} /></span>
+    {g.extant_form && <span class="tag">{g.extant_form}</span>}
+  </p>
+  <EntryMeta status={g.status} lastReviewed={g.last_reviewed} />
+
+  {g.contents_summary && (
+    <div class="parallel">
+      <p lang="en">{g.contents_summary.en}</p>
+      <p lang="hi">{g.contents_summary.hi}</p>
+    </div>
+  )}
+
+  <Content components={{ Pending, CitationBadge }} />
+
+  <section>
+    <h2>Status evidence</h2>
+    <CitationList items={g.status_evidence} />
+    {g.surviving_parts && <p>Surviving parts: {g.surviving_parts}</p>}
+    {g.claim && <p>Claim: {g.claim.statement} — {g.claim.claimant} (<CitationText c={g.claim.source} />)</p>}
+    {g.named_in.length > 0 && <><h3>Named in</h3><CitationList items={g.named_in} /></>}
+    {g.quoted_in.length > 0 && (
+      <>
+        <h3>Quoted in</h3>
+        <ul>{g.quoted_in.map((q) => <li><a href={`/grantha/${q.grantha}/`}>{q.grantha}</a> {q.location}{q.passage && <> · <a href={`/passage/${q.passage}/`}>passage</a></>} — <CitationText c={q.source} /></li>)}</ul>
+      </>
+    )}
+  </section>
+
+  {g.recovery && (
+    <section>
+      <h2>Recovery record</h2>
+      <dl class="fields">
+        <dt>Previously</dt><dd>{TEXT_STATUS_LABEL[g.recovery.previous_status].en}</dd>
+        <dt>Manuscript</dt><dd>{g.recovery.manuscript.repository}, {g.recovery.manuscript.catalogue_number}</dd>
+        <dt>Description</dt><dd>{g.recovery.description.script}; {g.recovery.description.date}; {g.recovery.description.extent}</dd>
+        <dt>Edition or description</dt><dd><CitationText c={g.recovery.edition_or_description} /></dd>
+        <dt>Identification</dt><dd>{g.recovery.identification.reason} — <CitationText c={g.recovery.identification.source} /></dd>
+      </dl>
+    </section>
+  )}
+
+  {g.date_range && (
+    <section>
+      <h2>Date</h2>
+      <p>{g.date_range.display} — <CitationText c={g.date_range.source} /></p>
+    </section>
+  )}
+
+  {editions.length > 0 && (
+    <section>
+      <h2>Editions</h2>
+      <ul>{editions.map((e) => e && <li><a href={`/sources/bibliography/#${e.id}`}>{e.data.title}</a>{e.data.year && <> ({e.data.year})</>}</li>)}</ul>
+    </section>
+  )}
+
+  {g.manuscripts.length > 0 && (
+    <section>
+      <h2>Manuscripts</h2>
+      <ul>{g.manuscripts.map((m) => <li>{m.repository}, {m.catalogue_number}{m.script && <> · {m.script}</>}{m.date && <> · {m.date}</>}{m.completeness && <> · {m.completeness}</>}</li>)}</ul>
+    </section>
+  )}
+
+  <OpenQuestions items={g.open_questions} />
+</BaseLayout>

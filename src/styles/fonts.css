@@ -1,0 +1,64 @@
+/*
+ * Self-hosted, subset fonts (CLAUDE.md: "Self-host, subset"). Rebuild with
+ * scripts/subset-fonts.py. All three families are under the SIL Open Font License;
+ * licence texts are in src/assets/fonts/.
+ *
+ * ZWJ/ZWNJ (U+200C-200D) are left to the Devanagari faces so conjunct control is not broken.
+ *
+ * Family names are prefixed "BY" so a locally installed copy is never used by mistake.
+ */
+
+/* Noto Serif: English and IAST. Basic Latin + Latin-1. */
+@font-face {
+  font-family: 'BY Serif';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/noto-serif-latin-wght-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-200B, U+2010-206F, U+20AC, U+20B9, U+2122, U+2190-2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'BY Serif';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/noto-serif-latin-wght-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-200B, U+2010-206F, U+20AC, U+20B9, U+2122, U+2190-2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* Noto Serif: IAST diacritics (ā ī ū ṛ ṝ ḷ ḹ ṅ ñ ṭ ḍ ṇ ś ṣ ṃ ḥ) and combining marks. */
+@font-face {
+  font-family: 'BY Serif';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/noto-serif-iast-wght-normal.woff2') format('woff2');
+  unicode-range: U+0100-017F, U+0300-036F, U+1E00-1EFF;
+}
+@font-face {
+  font-family: 'BY Serif';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/noto-serif-iast-wght-italic.woff2') format('woff2');
+  unicode-range: U+0100-017F, U+0300-036F, U+1E00-1EFF;
+}
+
+/* Noto Serif Devanagari: Hindi. */
+@font-face {
+  font-family: 'BY Devanagari';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../assets/fonts/noto-serif-devanagari-wght-normal.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF;
+}
+
+/* Tiro Devanagari Sanskrit: Sanskrit (preferred for verses, docs/03-visual-design.md §6). */
+@font-face {
+  font-family: 'BY Sanskrit';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/tiro-devanagari-sanskrit-400-normal.woff2') format('woff2');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+20F0, U+25CC, U+A830-A839, U+A8E0-A8FF;
+}

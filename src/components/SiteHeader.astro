@@ -1,0 +1,130 @@
+---
+import { NAV, UTILITY } from '../data/nav';
+import { SITE, UI } from '../i18n/ui';
+import Bi from './Bi.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="site-header">
+  <a class="skip-link" href="#main"><Bi label={UI.skip} /></a>
+  <div class="container container--wide site-header__bar">
+    <a class="brand" href="/" aria-current={path === '/' ? 'page' : undefined}>
+      <span lang="hi" class="brand__hi">{SITE.hi}</span>
+      <span lang="en" class="brand__en">{SITE.en}</span>
+    </a>
+    <div class="site-header__tools">
+      <ul class="utility" role="list">
+        {UTILITY.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <Bi label={item.label} />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <ThemeToggle />
+    </div>
+  </div>
+  <nav class="container container--wide primary-nav" aria-label="Main / मुख्य">
+    <ul role="list">
+      {NAV.map((item) => (
+        <li>
+          <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+            <Bi label={item.label} stack />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--rule);
+  }
+  .site-header__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-6);
+    padding-block: var(--space-4) var(--space-2);
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    color: var(--ink);
+    text-decoration: none;
+    line-height: 1.2;
+  }
+  .brand__hi {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .brand__en {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+  }
+  .site-header__tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .utility {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    font-size: 0.95rem;
+  }
+  .utility a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+  }
+  .primary-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-6);
+  }
+  .primary-nav a {
+    display: block;
+    padding-block: var(--space-2) var(--space-3);
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    line-height: 1.35;
+    font-size: 0.98rem;
+  }
+  .primary-nav a :global([lang='hi']) {
+    color: var(--ink-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+  .primary-nav a:hover,
+  .primary-nav a[aria-current='page'] {
+    border-bottom-color: var(--sindura);
+  }
+  .primary-nav a[aria-current='page'] {
+    font-weight: 600;
+  }
+  @media (max-width: 40rem) {
+    .primary-nav ul {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 var(--space-4);
+    }
+    .primary-nav a {
+      min-height: 2.75rem;
+    }
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+/**
+ * Plain-text form of a citation for entry templates: short title, location and grade, linking
+ * to the bibliography. The full <CitationBadge> (tap to expand) is built in Phase 2.
+ */
+import { getEntry } from 'astro:content';
+import { GRADE_LABEL, normaliseGrade, type Citation, type Grade } from '../schemas/common';
+
+interface Props {
+  c: Citation;
+}
+const { c } = Astro.props;
+const edition = await getEntry('edition', c.key);
+if (!edition) throw new Error(`Citation key "${c.key}" is not in content/bibliography.yaml`);
+const label = edition.data.short ?? edition.data.title;
+const grade = GRADE_LABEL[normaliseGrade(c.grade) as Grade];
+---
+<span class="cite">
+  <a href={`/sources/bibliography/#${c.key}`}>{label}</a>{c.location && <> {c.location}</>}{' '}<span class="cite__grade" title="Evidence grade">· {grade}</span>
+  {c.url && <> · <a href={c.url}>where we read it</a></>}
+</span>
+
+<style>
+  .cite {
+    font-size: 0.92em;
+  }
+  .cite__grade {
+    white-space: nowrap;
+    font-weight: 600;
+  }
+</style>

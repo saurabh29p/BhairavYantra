@@ -1,0 +1,42 @@
+---
+/** The single bibliography (concept §4.8). Each entry's id is its citation key and anchor. */
+import { getCollection } from 'astro:content';
+import EmptyState from '../../../components/EmptyState.astro';
+import PageHeading from '../../../components/PageHeading.astro';
+import { UI } from '../../../i18n/ui';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { byIast } from '../../../lib/text';
+
+const editions = (await getCollection('edition')).sort(byIast((e) => e.data.title));
+const people = (xs: string[], role: string) => (xs.length ? `${xs.join(', ')} (${role})` : '');
+---
+<BaseLayout title={UI.bibliography.en} titleHi={UI.bibliography.hi}>
+  <PageHeading en={UI.bibliography.en} hi={UI.bibliography.hi} />
+  <p class="muted"><span lang="en">Every edition, translation, manuscript and website cited on the site, described once.</span></p>
+  {editions.length === 0 ? (
+    <EmptyState />
+  ) : (
+    <ul class="entry-list">
+      {editions.map(({ data: e }) => (
+        <li id={e.id}>
+          <strong>{e.title}</strong>
+          {e.short && <span class="muted"> [{e.short}]</span>}
+          <div>
+            {[people(e.authors, 'author'), people(e.editors, 'ed.'), people(e.translators, 'tr.'), e.series, e.volume, e.publisher, e.place, e.year]
+              .filter(Boolean)
+              .join('. ')}
+            {e.repository && <>. {e.repository}, {e.catalogue_number}</>}
+          </div>
+          <div class="muted">
+            <span class="tag">{e.kind}</span>
+            <code>{e.id}</code>
+            {e.url && <> · <a href={e.url}>online</a></>}
+            {!e.details_confirmed && <> · details to be confirmed</>}
+          </div>
+          {e.copyright_note && <div class="muted">{e.copyright_note}</div>}
+          {e.note && <div class="muted">{e.note}</div>}
+        </li>
+      ))}
+    </ul>
+  )}
+</BaseLayout>

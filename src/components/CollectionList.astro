@@ -1,0 +1,36 @@
+---
+/**
+ * List of entries for a collection index page, with the empty state when there are none.
+ * Each item: Devanāgarī name (if any), IAST/English name, and a short note.
+ */
+import EmptyState from './EmptyState.astro';
+
+export interface ListItem {
+  href: string;
+  sa?: string;
+  latin: string;
+  note?: string;
+}
+interface Props {
+  items: ListItem[];
+  emptyNoteEn?: string;
+  emptyNoteHi?: string;
+}
+const { items, emptyNoteEn, emptyNoteHi } = Astro.props;
+---
+{items.length === 0 ? (
+  <EmptyState noteEn={emptyNoteEn} noteHi={emptyNoteHi} />
+) : (
+  <ul class="entry-list">
+    {items.map((it) => (
+      <li>
+        <a href={it.href}>
+          {it.sa && <span lang="sa">{it.sa}</span>}
+          {it.sa && ' · '}
+          <span lang={it.sa ? 'sa-Latn' : undefined}>{it.latin}</span>
+        </a>
+        {it.note && <div class="muted">{it.note}</div>}
+      </li>
+    ))}
+  </ul>
+)}

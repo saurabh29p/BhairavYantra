@@ -1,0 +1,42 @@
+---
+/** "Image details / चित्र विवरण": the full record (concept §7A). Only added images get a page. */
+import { getCollection, getEntry } from 'astro:content';
+import Bi from '../../components/Bi.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import Pending from '../../components/Pending.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GRADE_LABEL } from '../../schemas/common';
+
+export async function getStaticPaths() {
+  return (await getCollection('image'))
+    .filter((e) => e.data.status === 'added')
+    .map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const i = entry.data;
+const depicts = await Promise.all(i.depicts.map(async (id) => ({ id, d: (await getEntry('devata', id))?.data })));
+---
+<BaseLayout title={`${UI.imageDetails.en}: ${i.alt_en}`} titleHi={UI.imageDetails.hi}>
+  <PageHeading en={UI.imageDetails.en} hi={UI.imageDetails.hi} />
+  <Pending block what="Image display (darśana hero, gallery and viewing room) is built in Phase 4A" />
+  <div class="parallel">
+    <p lang="en">{i.alt_en}</p>
+    <p lang="hi">{i.alt_hi}</p>
+  </div>
+  <p class="credit">{i.attribution_text} · <a href={i.licence_url === 'not stated' ? i.source_url : i.licence_url}>{i.licence}</a></p>
+  <dl class="fields">
+    <dt>Depicts</dt>
+    <dd>{depicts.map((x, n) => <>{n > 0 && ', '}<a href={`/devata/${x.id}/`}>{x.d?.name_iast ?? x.id}</a></>)} ({i.identified_by === 'source' ? 'identified by the source' : 'our identification'}){i.identification_note && <> — {i.identification_note}</>}</dd>
+    <dt>Object</dt><dd>{i.object_type}, {i.material}</dd>
+    <dt>Place of origin</dt><dd>{i.origin_place}</dd>
+    <dt>Period</dt><dd>{i.period} · {GRADE_LABEL[i.period_grade]}</dd>
+    <dt>Current location</dt><dd>{i.current_location}{i.accession_number && <>, {i.accession_number}</>}</dd>
+    <dt>Source</dt><dd><a href={i.source_url}>{i.creator}</a>, retrieved {i.retrieved_on}</dd>
+    <dt>Licence</dt><dd>{i.licence}</dd>
+    <dt>In worship</dt><dd>{i.in_worship ? 'yes' : 'no'}{i.inner_shrine && ' · inner shrine (temple permission given)'}</dd>
+    {i.adjustments && <><dt>Adjustments</dt><dd>{i.adjustments}</dd></>}
+  </dl>
+  <p><a href="/images/"><Bi label={UI.image} /></a></p>
+</BaseLayout>

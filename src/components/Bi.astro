@@ -1,0 +1,21 @@
+---
+/** An English + Hindi label pair, e.g. "Devatā · देवता". Both are always visible. */
+import type { Label } from '../i18n/ui';
+
+interface Props {
+  label?: Label;
+  en?: string;
+  hi?: string;
+  /** Put each language on its own line. */
+  stack?: boolean;
+  class?: string;
+}
+const { label, stack = false, class: className } = Astro.props;
+const en = Astro.props.en ?? label?.en;
+const hi = Astro.props.hi ?? label?.hi;
+---
+<span class:list={['bi', { 'bi--stack': stack }, className]}>
+  {en && <span lang="en">{en}</span>}
+  {en && hi && <span class="bi__sep" aria-hidden="true">·</span>}
+  {hi && <span lang="hi">{hi}</span>}
+</span>

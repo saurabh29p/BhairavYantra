@@ -1,0 +1,36 @@
+---
+/** Page status and last review date (concept §4.1, §6.5–6.6). */
+interface Props {
+  status: 'draft' | 'reviewed' | 'stable';
+  lastReviewed: string;
+}
+const { status, lastReviewed } = Astro.props;
+---
+<p class="entry-meta">
+  <span class="tag" data-status={status}>{status}</span>
+  <span class="muted">Last reviewed <time datetime={lastReviewed}>{lastReviewed}</time></span>
+</p>
+{status === 'draft' && (
+  <p class="entry-meta__draft" role="note">
+    <span lang="en">Draft: this page is still being checked against its sources.</span>
+    <span lang="hi">प्रारूप: इस पृष्ठ की स्रोतों से जाँच अभी चल रही है।</span>
+  </p>
+)}
+
+<style>
+  .entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    align-items: center;
+    font-size: 0.92rem;
+  }
+  .entry-meta__draft > span {
+    display: block;
+  }
+  .entry-meta__draft {
+    border-inline-start: 3px solid var(--sindura);
+    padding: var(--space-2) var(--space-4);
+    background: var(--surface);
+  }
+</style>

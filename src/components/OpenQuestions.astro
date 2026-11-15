@@ -1,0 +1,18 @@
+---
+/** Unverified points, shown on the page rather than hidden (concept §4.1). */
+import { UI } from '../i18n/ui';
+import Bi from './Bi.astro';
+
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+{items.length > 0 && (
+  <section aria-labelledby="open-questions">
+    <h2 id="open-questions"><Bi label={UI.openQuestions} /></h2>
+    <ul>
+      {items.map((q) => <li>{q}</li>)}
+    </ul>
+  </section>
+)}

@@ -1,0 +1,37 @@
+---
+/**
+ * Shown where a collection has no entries yet. Entries come only from the owner's research
+ * files, after source review (CLAUDE.md rule 1), so the page says so instead of filling space.
+ */
+import { UI } from '../i18n/ui';
+import Bi from './Bi.astro';
+
+interface Props {
+  /** Optional note on what will appear here. */
+  noteEn?: string;
+  noteHi?: string;
+}
+const { noteEn, noteHi } = Astro.props;
+---
+<div class="empty-state" role="status">
+  <p class="empty-state__title"><Bi label={UI.empty} stack /></p>
+  {(noteEn || noteHi) && <p class="muted"><Bi en={noteEn} hi={noteHi} stack /></p>}
+  <slot />
+</div>
+
+<style>
+  .empty-state {
+    border: 1px solid var(--rule);
+    border-inline-start: 3px solid var(--gold);
+    border-radius: var(--radius);
+    padding: var(--space-4) var(--space-6);
+    margin-block: var(--space-6);
+    background: var(--surface);
+  }
+  .empty-state__title {
+    font-weight: 600;
+  }
+  .empty-state p:last-child {
+    margin-bottom: 0;
+  }
+</style>

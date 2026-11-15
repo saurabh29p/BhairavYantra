@@ -1,0 +1,74 @@
+/*
+ * Design tokens (CLAUDE.md "Design tokens", docs/03-visual-design.md §5).
+ * Light and dark are designed separately, not inverted. One vermilion accent (sindūra);
+ * gold for yantra lines, frames and dividers only, never for text.
+ *
+ * Contrast on --bg (WCAG): light ink 14.5, muted 6.9, sindura 5.9 · dark ink 15.3,
+ * muted 8.3, sindura 6.8. Gold is used only for non-text lines (light 4.4, dark 8.3).
+ */
+:root {
+  --font-latin: 'BY Serif', 'Noto Serif', Georgia, 'Times New Roman', serif;
+  --font-hindi: 'BY Serif', 'BY Devanagari', 'Noto Serif Devanagari', serif;
+  --font-sanskrit: 'BY Serif', 'BY Sanskrit', 'Tiro Devanagari Sanskrit', 'BY Devanagari', serif;
+
+  --leading-latin: 1.6;
+  --leading-devanagari: 1.9; /* ≥ 1.8 so mātrās and conjuncts breathe (§6) */
+
+  --measure: 44rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --radius: 4px;
+
+  /* Light: warm ash / bhasma off-white, not stark white. */
+  --bg-ash: #f3f0ea;
+  --bg-night: #0b0e17;
+  --bg: var(--bg-ash);
+  --surface: #e9e5dd;
+  --ink: #1c1f27;
+  --ink-muted: #4e525b;
+  --rule: #cfc9be;
+  --sindura: #a83218;
+  --gold: #8c6a22;
+  --glow: rgb(196 150 70 / 0.16);
+  --pending-bg: #f6e9c8;
+  --pending-ink: #4a3608;
+  --pending-rule: #b8902e;
+  color-scheme: light;
+}
+
+/* Dark: night blue-black (Bhairava as Kāla), not pure black. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: var(--bg-night);
+    --surface: #141926;
+    --ink: #e8e5de;
+    --ink-muted: #a6aab3;
+    --rule: #2b3142;
+    --sindura: #f2735a;
+    --gold: #c9a55a;
+    --glow: rgb(214 170 90 / 0.12);
+    --pending-bg: #2a2412;
+    --pending-ink: #f0dfae;
+    --pending-rule: #8d7330;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: var(--bg-night);
+  --surface: #141926;
+  --ink: #e8e5de;
+  --ink-muted: #a6aab3;
+  --rule: #2b3142;
+  --sindura: #f2735a;
+  --gold: #c9a55a;
+  --glow: rgb(214 170 90 / 0.12);
+  --pending-bg: #2a2412;
+  --pending-ink: #f0dfae;
+  --pending-rule: #8d7330;
+  color-scheme: dark;
+}

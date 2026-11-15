@@ -1,0 +1,14 @@
+---
+import Bi from '../components/Bi.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { UI } from '../i18n/ui';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Page not found" titleHi="पृष्ठ नहीं मिला">
+  <PageHeading en="Page not found" hi="पृष्ठ नहीं मिला" />
+  <p>
+    <a href="/"><Bi label={UI.home} /></a> ·
+    <a href="/a-z/"><Bi label={UI.az} /></a> ·
+    <a href="/search/"><Bi label={UI.search} /></a>
+  </p>
+</BaseLayout>
