@@ -1,0 +1,9 @@
+text_sa: परीक्षण
+source_text: { grantha: fixture-text, edition: fixture-print, location: "4.1" }
+where_we_read_it: https://example.org/fixture/4
+grade: D
+attribution_check:
+  result: not-found
+  claimed_source: Fixture claimed source
+  checked_edition: fixture-print
+  note: Fixture note.

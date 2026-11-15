@@ -1,0 +1,79 @@
+---
+import { NAV, UTILITY } from '../data/nav';
+import { SITE, UI } from '../i18n/ui';
+import Bi from './Bi.astro';
+---
+<footer class="site-footer">
+  <div class="container container--wide">
+    <p class="footer-grades">
+      <a href="/sources/#grades"><Bi label={UI.grades} /></a>:{' '}
+      <span>A · A‑w · B · C · D · ⚠</span>
+      <span class="sep" aria-hidden="true">|</span>
+      <a href="/corrections/"><Bi en="Suggest a correction (with source)" hi="सुधार सुझाएँ (स्रोत सहित)" /></a>
+    </p>
+    <nav aria-label="Site map / साइट-मानचित्र">
+      <h2 class="footer-heading"><Bi label={UI.siteMap} /></h2>
+      <ul class="sitemap" role="list">
+        <li><a href="/"><Bi label={UI.home} /></a></li>
+        {NAV.map((item) => (
+          <li>
+            <a href={item.href}><Bi label={item.label} /></a>
+            {item.children && (
+              <ul role="list">
+                {item.children.map((c) => (
+                  <li><a href={c.href}><Bi label={c.label} /></a></li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))}
+        {UTILITY.map((item) => (
+          <li><a href={item.href}><Bi label={item.label} /></a></li>
+        ))}
+      </ul>
+    </nav>
+    <p class="muted footer-note">
+      <span lang="hi">{SITE.hi}</span> · <span lang="en">{SITE.en} (working name)</span>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--gold);
+    padding-block: var(--space-6) var(--space-8);
+    font-size: 0.95rem;
+  }
+  .footer-grades .sep {
+    color: var(--rule);
+    padding-inline: var(--space-2);
+  }
+  .footer-heading {
+    font-size: 1rem;
+    margin: var(--space-6) 0 var(--space-3);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .sitemap {
+    columns: 3 14rem;
+    column-gap: var(--space-8);
+  }
+  .sitemap > li {
+    break-inside: avoid;
+    padding-bottom: var(--space-2);
+  }
+  .sitemap ul {
+    padding-inline-start: var(--space-4);
+  }
+  .sitemap a {
+    display: inline-block;
+    padding-block: 0.15rem;
+  }
+  .footer-note {
+    margin-top: var(--space-6);
+    margin-bottom: 0;
+  }
+</style>

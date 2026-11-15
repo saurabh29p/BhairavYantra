@@ -1,0 +1,18 @@
+---
+/**
+ * Inline citation for MDX bodies: <CitationBadge cite="edition-id" loc="31.30" grade="A-w" />.
+ * `cite` is the citation key (JSX reserves the name `key`). The build checks every badge
+ * (src/lib/citation-lint.ts). Phase 2 adds the expanding detail view; this renders the
+ * short form only.
+ */
+import type { Grade } from '../schemas/common';
+import CitationText from './CitationText.astro';
+
+interface Props {
+  cite: string;
+  grade: Grade | 'A‑w';
+  loc?: string;
+}
+const { cite, grade, loc } = Astro.props;
+---
+<CitationText c={{ key: cite, grade: grade as Grade, location: loc }} />

@@ -1,0 +1,40 @@
+---
+/**
+ * Developer page for checking the self-hosted fonts (concept §9: test conjuncts and the
+ * candrabindu/anusvāra). Not linked from the navigation. Samples are the conjuncts listed in
+ * concept §9, the IAST letters listed in docs/03-visual-design.md §6, and marks on a dotted
+ * circle; no religious text.
+ */
+import PageHeading from '../../components/PageHeading.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const conjuncts = ['क्ष', 'ज्ञ', 'श्र', 'ह्म', 'द्ध', 'ङ्ग'];
+const marks = ['◌ँ', '◌ं', '◌ः', '◌्', '।', '॥'];
+const iast = 'ā ī ū ṛ ṝ ḷ ḹ ṅ ñ ṭ ḍ ṇ ś ṣ ṃ ḥ';
+const iastUpper = 'Ā Ī Ū Ṛ Ṝ Ḷ Ḹ Ṅ Ñ Ṭ Ḍ Ṇ Ś Ṣ Ṃ Ḥ';
+const numerals = '० १ २ ३ ४ ५ ६ ७ ८ ९ · ३१.३०';
+---
+<BaseLayout title="Type specimen" titleHi="अक्षर" noindex>
+  <PageHeading en="Type specimen" hi="अक्षर" />
+  <table>
+    <thead><tr><th scope="col">Role</th><th scope="col">Sample</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Sanskrit (Tiro Devanagari Sanskrit)</th><td class="big" lang="sa">{conjuncts.join('  ')}</td></tr>
+      <tr><th scope="row">Hindi (Noto Serif Devanagari)</th><td class="big" lang="hi">{conjuncts.join('  ')}</td></tr>
+      <tr><th scope="row">Marks (Sanskrit)</th><td class="big" lang="sa">{marks.join('  ')}</td></tr>
+      <tr><th scope="row">Marks (Hindi)</th><td class="big" lang="hi">{marks.join('  ')}</td></tr>
+      <tr><th scope="row">Devanāgarī numerals</th><td class="big" lang="hi">{numerals}</td></tr>
+      <tr><th scope="row">IAST (Noto Serif)</th><td class="big" lang="sa-Latn">{iast}</td></tr>
+      <tr><th scope="row">IAST capitals</th><td class="big" lang="sa-Latn">{iastUpper}</td></tr>
+      <tr><th scope="row">IAST italic</th><td class="big" lang="sa-Latn"><em>{iast}</em></td></tr>
+      <tr><th scope="row">IAST, decomposed input</th><td class="big" lang="sa-Latn">{iast.normalize('NFD')}</td></tr>
+      <tr><th scope="row">Site name</th><td class="big"><span lang="hi">भैरव यंत्र</span> · <span lang="en">BhairavYantra</span></td></tr>
+    </tbody>
+  </table>
+</BaseLayout>
+
+<style>
+  .big {
+    font-size: 1.6rem;
+  }
+</style>

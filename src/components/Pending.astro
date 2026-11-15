@@ -1,0 +1,45 @@
+---
+/**
+ * A visible placeholder for material the owner has not supplied yet (CLAUDE.md rule 1).
+ * Never replace it with invented text; say what is needed.
+ *   <Pending what="Hindi summary, in the owner's words" />
+ */
+import { UI } from '../i18n/ui';
+
+interface Props {
+  /** What is needed, in plain words. */
+  what: string;
+  /** Render as a block instead of inline. */
+  block?: boolean;
+}
+const { what, block = false } = Astro.props;
+const Tag = block ? 'div' : 'span';
+---
+<Tag class:list={['pending', { 'pending--block': block }]} data-pending>
+  <span class="pending__label"><span lang="en">{UI.pending.en}</span> · <span lang="hi">{UI.pending.hi}</span>:</span>
+  <span class="pending__what">{what}</span>
+  <slot />
+</Tag>
+
+<style>
+  .pending {
+    display: inline;
+    background: var(--pending-bg);
+    color: var(--pending-ink);
+    border: 1px dashed var(--pending-rule);
+    border-radius: var(--radius);
+    padding: 0.05em 0.4em;
+    font-size: 0.95em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  .pending--block {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    margin-block: var(--space-4);
+  }
+  .pending__label {
+    font-weight: 600;
+    margin-inline-end: 0.3em;
+  }
+</style>

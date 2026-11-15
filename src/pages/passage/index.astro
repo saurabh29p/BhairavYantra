@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import CollectionList from '../../components/CollectionList.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = await getCollection('passage');
+const items = entries.map((e) => {
+  const l = e.data.location;
+  return {
+    href: `/passage/${e.id}/`,
+    latin: [l.grantha, l.division, `${l.chapter}.${l.verse}`].filter(Boolean).join(' '),
+    note: `Grade ${e.data.grade}`,
+  };
+});
+---
+<BaseLayout title={UI.passage.en} titleHi={UI.passage.hi}>
+  <PageHeading en={UI.passage.en} hi={UI.passage.hi} />
+  <p class="muted"><span lang="en">Verses and prose quoted verbatim from named editions, with location and grade.</span></p>
+  <CollectionList items={items} />
+</BaseLayout>

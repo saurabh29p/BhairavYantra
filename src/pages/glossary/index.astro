@@ -1,0 +1,11 @@
+---
+import PageHeading from '../../components/PageHeading.astro';
+import Pending from '../../components/Pending.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title={UI.glossary.en} titleHi={UI.glossary.hi}>
+  <PageHeading en={UI.glossary.en} hi={UI.glossary.hi} />
+  <p class="muted"><span lang="en">Sanskrit terms in Devanāgarī, IAST, Hindi and English (concept §3).</span></p>
+  <Pending block what="Glossary skeleton (Phase 1); terms only from the research files" />
+</BaseLayout>

@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import CollectionList from '../../../components/CollectionList.astro';
+import PageHeading from '../../../components/PageHeading.astro';
+import { UI } from '../../../i18n/ui';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { byIast } from '../../../lib/text';
+
+const entries = (await getCollection('person')).sort(byIast((e) => e.data.name_iast));
+const items = entries.map((e) => ({
+  href: `/parampara/person/${e.id}/`,
+  sa: e.data.name_sa,
+  latin: e.data.name_iast,
+  note: [e.data.historicity, e.data.dates?.display].filter(Boolean).join(' · '),
+}));
+---
+<BaseLayout title={UI.person.en} titleHi={UI.person.hi}>
+  <PageHeading en={UI.person.en} hi={UI.person.hi} />
+  <p class="muted"><span lang="en">Historical ācāryas and sādhakas. Living persons are not included (concept §8.3).</span></p>
+  <CollectionList items={items} />
+</BaseLayout>

@@ -1,0 +1,22 @@
+- id: fixture-print
+  kind: printed-edition
+  title: Fixture printed edition
+  short: FxP
+  of_text: fixture-text
+  editors: [Fixture Editor]
+  publisher: Fixture Press
+  year: 2000
+- id: fixture-site
+  kind: website
+  title: Fixture website
+  short: FxW
+  url: https://example.org/fixture
+- id: fixture-study
+  kind: scholarly-work
+  title: Fixture scholarly study
+  authors: [Fixture Author]
+  year: "1999"
+  details_confirmed: false
+- id: fixture-field
+  kind: field-record
+  title: Fixture field record

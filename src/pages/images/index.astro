@@ -1,0 +1,24 @@
+---
+/**
+ * Image records. Only images with status "added" are listed; candidates and approved records
+ * are working files for the owner and never appear on the site (content/images/README.md).
+ * Galleries, darśana hero and viewing room are built in Phase 4A.
+ */
+import { getCollection } from 'astro:content';
+import CollectionList from '../../components/CollectionList.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const entries = (await getCollection('image')).filter((e) => e.data.status === 'added');
+const items = entries.map((e) => ({
+  href: `/images/${e.id}/`,
+  latin: e.data.alt_en,
+  note: [e.data.object_type, e.data.origin_place, e.data.period].join(' · '),
+}));
+---
+<BaseLayout title={UI.image.en} titleHi={UI.image.hi}>
+  <PageHeading en={UI.image.en} hi={UI.image.hi} />
+  <p class="muted"><span lang="en">Real images of the deities, each with its source, place, period, licence and credit.</span></p>
+  <CollectionList items={items} />
+</BaseLayout>

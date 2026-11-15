@@ -1,0 +1,67 @@
+---
+/**
+ * Light/dark switch. Without a stored choice the site follows the system setting; the choice
+ * is kept in this browser only (localStorage), guarded so private modes still work.
+ */
+import { UI } from '../i18n/ui';
+---
+<button type="button" class="theme-toggle" data-theme-toggle>
+  <span class="visually-hidden">Switch colour theme to: </span>
+  <span data-when="dark"><span lang="en">{UI.themeLight.en}</span> · <span lang="hi">{UI.themeLight.hi}</span></span>
+  <span data-when="light"><span lang="en">{UI.themeDark.en}</span> · <span lang="hi">{UI.themeDark.hi}</span></span>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const current = () =>
+    (root.dataset.theme as 'light' | 'dark' | undefined) ??
+    (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  function sync() {
+    const t = current();
+    document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((b) => {
+      b.dataset.current = t;
+    });
+  }
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const next = current() === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {
+        /* storage unavailable: the choice lasts for this page only */
+      }
+      sync();
+    }),
+  );
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', sync);
+  sync();
+</script>
+
+<style>
+  .theme-toggle {
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: var(--space-1) var(--space-3);
+    min-height: 2.5rem;
+    cursor: pointer;
+  }
+  .theme-toggle:hover {
+    border-color: var(--ink-muted);
+  }
+  /* The button names the mode it switches to. */
+  .theme-toggle [data-when] {
+    display: none;
+  }
+  .theme-toggle[data-current='dark'] [data-when='dark'],
+  .theme-toggle[data-current='light'] [data-when='light'] {
+    display: inline;
+  }
+  .theme-toggle:not([data-current]) [data-when='light'] {
+    display: inline;
+  }
+</style>

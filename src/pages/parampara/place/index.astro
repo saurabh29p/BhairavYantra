@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import CollectionList from '../../../components/CollectionList.astro';
+import PageHeading from '../../../components/PageHeading.astro';
+import { UI } from '../../../i18n/ui';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { byIast } from '../../../lib/text';
+
+const entries = (await getCollection('place')).sort(byIast((e) => e.data.name_iast));
+const items = entries.map((e) => ({
+  href: `/parampara/place/${e.id}/`,
+  sa: e.data.name_sa,
+  latin: e.data.name_iast,
+  note: [e.data.location.locality, e.data.location.region, e.data.location.country].filter(Boolean).join(', '),
+}));
+---
+<BaseLayout title={UI.place.en} titleHi={UI.place.hi}>
+  <PageHeading en={UI.place.en} hi={UI.place.hi} />
+  <p class="muted"><span lang="en">Kṣetras and temples. Textual mentions are kept apart from temple lore.</span></p>
+  <CollectionList items={items} />
+</BaseLayout>

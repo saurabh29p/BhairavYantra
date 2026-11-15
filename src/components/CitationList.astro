@@ -1,0 +1,19 @@
+---
+import type { Citation } from '../schemas/common';
+import CitationText from './CitationText.astro';
+
+interface Props {
+  items: Citation[];
+}
+const { items } = Astro.props;
+---
+{items.length > 0 && (
+  <ul class="citation-list">
+    {items.map((c) => (
+      <li>
+        <CitationText c={c} />
+        {c.note && <span class="muted"> — {c.note}</span>}
+      </li>
+    ))}
+  </ul>
+)}

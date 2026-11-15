@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { SITE } from '../i18n/ui';
+
+interface Props {
+  /** English title. */
+  title: string;
+  /** Hindi or Devanāgarī title; included in <title> so Hindi searchers find the page. */
+  titleHi?: string;
+  description?: string;
+  /** Wider content column (lists, tables). */
+  wide?: boolean;
+  /** Keep the page out of search engines (developer pages). */
+  noindex?: boolean;
+}
+const { title, titleHi, description, wide = false, noindex = false } = Astro.props;
+const isHome = Astro.url.pathname === '/';
+const fullTitle = isHome
+  ? `${SITE.hi} · ${SITE.en}`
+  : `${title}${titleHi ? ` · ${titleHi}` : ''} — ${SITE.en}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f3f0ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0e17" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // Apply a stored theme before first paint. Storage may be unavailable (private mode).
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <SiteHeader />
+    <main id="main" tabindex="-1" class:list={['container', { 'container--wide': wide }]}>
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

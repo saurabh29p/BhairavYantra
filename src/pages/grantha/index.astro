@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import CollectionList from '../../components/CollectionList.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import { TEXT_STATUS_LABEL, UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { byIast } from '../../lib/text';
+
+const entries = (await getCollection('grantha')).sort(byIast((e) => e.data.name_iast));
+const items = entries.map((e) => ({
+  href: `/grantha/${e.id}/`,
+  sa: e.data.name_sa,
+  latin: e.data.name_iast,
+  note: `${TEXT_STATUS_LABEL[e.data.text_status].en} · ${TEXT_STATUS_LABEL[e.data.text_status].hi}`,
+}));
+---
+<BaseLayout title={UI.grantha.en} titleHi={UI.grantha.hi}>
+  <PageHeading en={UI.grantha.en} hi={UI.grantha.hi} />
+  <p class="muted"><span lang="en">Texts, each with its survival status and the evidence for it.</span></p>
+  <CollectionList items={items} />
+  <p><a href="/passage/">{UI.passage.en} · <span lang="hi">{UI.passage.hi}</span></a></p>
+</BaseLayout>

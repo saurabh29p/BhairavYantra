@@ -1,0 +1,3 @@
+# The single bibliography (concept §4.8). Every citation key on the site is the id of an entry
+# here. Schema: src/schemas/edition.ts. Entries are added when research is migrated (Phase 3).
+[]

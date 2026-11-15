@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import Bi from '../components/Bi.astro';
+import Pending from '../components/Pending.astro';
+import { NAV } from '../data/nav';
+import { SITE, UI } from '../i18n/ui';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const counts: Record<string, number> = {
+  '/devata/': (await getCollection('devata')).length,
+  '/grantha/': (await getCollection('grantha')).length,
+  '/parampara/': (await getCollection('person')).length + (await getCollection('place')).length,
+};
+---
+<BaseLayout title={SITE.en} titleHi={SITE.hi}>
+  <section class="hero" aria-labelledby="site-title">
+    <h1 id="site-title">
+      <span lang="hi" class="hero__hi">{SITE.hi}</span>
+      <span lang="en" class="hero__en">{SITE.en}</span>
+    </h1>
+    <!-- Wording from README.md. -->
+    <p class="lede" lang="en">
+      A bilingual (<span lang="hi">हिंदी</span> + English, Sanskrit in <span lang="hi">देवनागरी</span> + IAST)
+      library, encyclopedia and, later, community on Bhairava, the Bhairavīs and the Daśa Mahāvidyās,
+      presented as a yantra-form map. Every statement carries its source and an evidence grade.
+    </p>
+    <p><Pending what="Hindi description of the site, in the owner's words" /></p>
+  </section>
+
+  <section class="map-placeholder" aria-labelledby="map-heading">
+    <h2 id="map-heading"><Bi en="Yantra-form map" hi="यंत्र-रूप मानचित्र" stack /></h2>
+    <p class="muted"><Bi label={UI.inPreparation} /></p>
+  </section>
+
+  <section aria-labelledby="sections-heading">
+    <h2 id="sections-heading"><Bi label={UI.library} /></h2>
+    <ul class="entry-list">
+      {NAV.map((item) => (
+        <li>
+          <a href={item.href}><Bi label={item.label} /></a>
+          {item.href in counts && <span class="muted"> ({counts[item.href]})</span>}
+          {item.children && (
+            <span class="muted">
+              {' '}— {item.children.map((c, i) => <>{i > 0 && ', '}<a href={c.href}>{c.label.en}</a></>)}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding-block: var(--space-8) var(--space-4);
+  }
+  .hero h1 > span {
+    display: block;
+  }
+  .hero__hi {
+    font-size: clamp(2.2rem, 1.6rem + 3vw, 3.4rem);
+    line-height: 1.45;
+  }
+  .hero__en {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+  }
+  .hero .lede {
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+  .map-placeholder {
+    text-align: center;
+    border-block: 1px solid var(--gold);
+    padding-block: var(--space-6);
+    margin-block: var(--space-8);
+    background: radial-gradient(closest-side, var(--glow), transparent);
+  }
+  .map-placeholder h2 {
+    margin-top: 0;
+  }
+  .map-placeholder p {
+    margin-bottom: 0;
+  }
+</style>

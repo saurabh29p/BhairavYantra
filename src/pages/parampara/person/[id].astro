@@ -1,0 +1,44 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import CitationBadge from '../../../components/CitationBadge.astro';
+import CitationList from '../../../components/CitationList.astro';
+import CitationText from '../../../components/CitationText.astro';
+import EntryMeta from '../../../components/EntryMeta.astro';
+import OpenQuestions from '../../../components/OpenQuestions.astro';
+import PageHeading from '../../../components/PageHeading.astro';
+import Pending from '../../../components/Pending.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('person')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const p = entry.data;
+const { Content } = await render(entry);
+const works = await Promise.all(p.works.map((id) => getEntry('grantha', id)));
+---
+<BaseLayout title={p.name_iast} titleHi={p.name_sa}>
+  <PageHeading en={p.name_iast} hi={p.name_sa} hiLang="sa" />
+  <p><span class="tag">{p.historicity}</span>{p.traditions.map((t) => <> <span class="tag">{t}</span></>)}</p>
+  <EntryMeta status={p.status} lastReviewed={p.last_reviewed} />
+  {p.dates && <p>{p.dates.display} — <CitationText c={p.dates.source} /></p>}
+  <div class="parallel">
+    <p lang="en">{p.summary_en}</p>
+    <p lang="hi">{p.summary_hi}</p>
+  </div>
+  <Content components={{ Pending, CitationBadge }} />
+  {works.length > 0 && (
+    <section>
+      <h2>Works</h2>
+      <ul>{works.map((w, i) => w && <li><a href={`/grantha/${p.works[i]}/`}><span lang="sa">{w.data.name_sa}</span> · <span lang="sa-Latn">{w.data.name_iast}</span></a></li>)}</ul>
+    </section>
+  )}
+  {p.historical_sources.length > 0 && (
+    <section><h2>Documented history</h2><CitationList items={p.historical_sources} /></section>
+  )}
+  {p.traditional_sources.length > 0 && (
+    <section><h2>Tradition and hagiography</h2><CitationList items={p.traditional_sources} /></section>
+  )}
+  <OpenQuestions items={p.open_questions} />
+</BaseLayout>

@@ -1,0 +1,56 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import CitationBadge from '../../../components/CitationBadge.astro';
+import CitationList from '../../../components/CitationList.astro';
+import CitationText from '../../../components/CitationText.astro';
+import EntryMeta from '../../../components/EntryMeta.astro';
+import OpenQuestions from '../../../components/OpenQuestions.astro';
+import PageHeading from '../../../components/PageHeading.astro';
+import Pending from '../../../components/Pending.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('place')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const p = entry.data;
+const { Content } = await render(entry);
+const forms = await Promise.all(p.presiding_forms.map(async (f) => ({ ...f, d: (await getEntry('devata', f.devata))?.data })));
+const loc = [p.location.locality, p.location.region, p.location.country].filter(Boolean).join(', ');
+---
+<BaseLayout title={p.name_en ?? p.name_iast} titleHi={p.name_sa}>
+  <PageHeading en={p.name_en ?? p.name_iast} hi={p.name_sa} hiLang="sa" />
+  {p.name_en && <p lang="sa-Latn">{p.name_iast}</p>}
+  <p class="muted">{loc}</p>
+  <EntryMeta status={p.status} lastReviewed={p.last_reviewed} />
+  <div class="parallel">
+    <p lang="en">{p.summary_en}</p>
+    <p lang="hi">{p.summary_hi}</p>
+  </div>
+  <Content components={{ Pending, CitationBadge }} />
+  {forms.length > 0 && (
+    <section>
+      <h2>Presiding forms</h2>
+      <ul>{forms.map((f) => <li><a href={`/devata/${f.devata}/`}>{f.d ? f.d.name_iast : f.devata}</a> — <CitationText c={f.source} /></li>)}</ul>
+    </section>
+  )}
+  {p.textual_mentions.length > 0 && (
+    <section><h2>In the texts</h2><CitationList items={p.textual_mentions} /></section>
+  )}
+  {p.temple_lore.length > 0 && (
+    <section>
+      <h2><span lang="en">Living tradition</span> · <span lang="hi">जीवित परंपरा</span></h2>
+      <ul>
+        {p.temple_lore.map((l) => (
+          <li>
+            <span lang="en">{l.statement_en}</span>
+            {l.statement_hi && <> · <span lang="hi">{l.statement_hi}</span></>}
+            {' '}— <CitationText c={l.source} />
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+  <OpenQuestions items={p.open_questions} />
+</BaseLayout>

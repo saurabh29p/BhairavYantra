@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+
+      - name: Schema and integrity check (content/)
+        run: npm run check:content
+
+      - name: Unit tests (schemas, citation lint, integrity)
+        run: npm test
+
+      - name: Type check and build
+        run: npm run build
+
+      - name: Build page templates with test fixtures
+        run: npm run build:fixtures
+
+      - name: Link check
+        run: npm run check:links -- dist dist-fixtures
+
+      - name: Install Chromium for the accessibility check
+        run: npx playwright install --with-deps chromium
+
+      - name: Accessibility check (axe, WCAG 2.1 AA, light + dark, desktop + phone)
+        run: npm run check:a11y -- dist dist-fixtures

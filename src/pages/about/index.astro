@@ -1,0 +1,10 @@
+---
+import PageHeading from '../../components/PageHeading.astro';
+import Pending from '../../components/Pending.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title={UI.about.en} titleHi={UI.about.hi}>
+  <PageHeading en={UI.about.en} hi={UI.about.hi} />
+  <Pending block what="About & Ethics page (Phase 1): purpose, mantra policy, corrections and contact, in the owner's words" />
+</BaseLayout>

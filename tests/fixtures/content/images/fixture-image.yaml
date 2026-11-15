@@ -1,0 +1,23 @@
+file: fixture-image.png
+status: added
+depicts: [fixture-devata]
+identified_by: ours
+identification_note: Fixture identification reason.
+object_type: book-plate
+material: paper
+origin_place: Fixture place
+period: Fixture period
+period_grade: C
+current_location: Fixture library
+accession_number: FX-IMG-1
+source_url: https://example.org/image
+creator: Fixture creator
+retrieved_on: 2026-11-15
+licence: Public domain
+licence_url: https://example.org/licence
+attribution_text: Fixture attribution
+in_worship: false
+inner_shrine: false
+temple_permission: not-needed
+alt_en: Fixture image, a grey square.
+alt_hi: परीक्षण चित्र।

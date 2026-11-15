@@ -1,0 +1,74 @@
+---
+/**
+ * Mantra entry template. The full <MantraBlock> is built in Phase 2; this template already
+ * carries the fixed dīkṣā note (concept §8.2), the source line and the attribution check.
+ * No audio, no "how to chant", no benefits (CLAUDE.md rule 5, concept §8.2).
+ */
+import { getCollection, getEntry } from 'astro:content';
+import CitationText from '../../components/CitationText.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import Pending from '../../components/Pending.astro';
+import { UI } from '../../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GRADE_LABEL } from '../../schemas/common';
+
+export async function getStaticPaths() {
+  return (await getCollection('mantra')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const m = entry.data;
+const grantha = await getEntry('grantha', m.source_text.grantha);
+const sourceLine = `${grantha?.data.name_iast ?? m.source_text.grantha}, ${m.source_text.location}`;
+const checked = m.attribution_check.checked_edition ? await getEntry('edition', m.attribution_check.checked_edition) : undefined;
+const fields = (['viniyoga', 'rsi', 'chandas', 'devata', 'bija', 'sakti'] as const).filter((k) => m[k]);
+const fieldLabel = { viniyoga: 'Viniyoga', rsi: 'Ṛṣi', chandas: 'Chandas', devata: 'Devatā', bija: 'Bīja', sakti: 'Śakti' };
+---
+<BaseLayout title={`${UI.mantra.en}: ${sourceLine}`} titleHi={grantha?.data.name_sa}>
+  <PageHeading en={sourceLine} hi={grantha?.data.name_sa} hiLang="sa" />
+  <aside class="diksa-note" aria-label="Note on dīkṣā">
+    <p lang="en">Recorded from {sourceLine}. Traditionally, mantras are received through dīkṣā from a qualified guru; this page documents what the text says and is not a substitute for that.</p>
+    <p><Pending what="Hindi wording of the fixed dīkṣā note (concept §8.2 gives the English only)" /></p>
+  </aside>
+  <p class="sa-block" lang="sa">{m.text_sa}</p>
+  {fields.length > 0 && (
+    <dl class="fields">
+      {fields.map((k) => <><dt>{fieldLabel[k]}</dt><dd lang="sa">{m[k]}</dd></>)}
+    </dl>
+  )}
+  <p>
+    Source: <a href={`/grantha/${m.source_text.grantha}/`}>{grantha?.data.name_iast ?? m.source_text.grantha}</a> {m.source_text.location}{' '}
+    · <strong>{GRADE_LABEL[m.grade]}</strong>{' '}· <a href={m.where_we_read_it}>where we read it</a>
+  </p>
+  <section>
+    <h2>Attribution check</h2>
+    <p>
+      <span class="tag">{m.attribution_check.result}</span>
+      {m.attribution_check.claimed_source && <> Claimed: {m.attribution_check.claimed_source}.</>}
+      {checked && <> Checked in <a href={`/sources/bibliography/#${checked.id}`}>{checked.data.title}</a>.</>}
+      {m.attribution_check.note && <> {m.attribution_check.note}</>}
+    </p>
+  </section>
+  {m.tradition_note && (
+    <section>
+      <h2>Tradition</h2>
+      <p>{m.tradition_note.text} — <CitationText c={m.tradition_note.source} /></p>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .diksa-note {
+    border-inline-start: 3px solid var(--gold);
+    background: var(--surface);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-6);
+    font-size: 0.95rem;
+  }
+  .diksa-note p:last-child {
+    margin-bottom: 0;
+  }
+  .sa-block {
+    white-space: pre-line;
+  }
+</style>
