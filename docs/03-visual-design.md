@@ -130,10 +130,12 @@ it leaves a visible placeholder until the owner supplies it.
 2. **Dedication:** **nothing composed.** The Samarpaṇa page shows only verses quoted verbatim
    from scripture, each with text, edition, chapter/verse and grade, chosen from the research
    files. No connecting prose in the site's own voice beyond the page title and source lines.
-   Until a verse is sourced in `research/`, the page shows a visible "pending" placeholder.
+   Candidate verses (Kālī: Devī Māhātmya 7.5; Baṭuka Bhairava: sāttvika dhyāna) are in
+   `research/20-dedication-verses.md`, with their grades; use them exactly as given there.
 3. **Images:** photographs of the **main temples of each deity**, with the temple's
    identification taken from the research files.
 4. **Frame:** a **real yantra ring**, drawn exactly from a yantra described in a cited text
    (e.g. the Baṭuka Bhairava yantra as a named text gives it). The yantra-ring frame is not
    drawn until that source is in `research/`; until then, use a plain single gold circle and
-   do not call it a yantra.
+   do not call it a yantra. Current status: `research/21-yantra-source-status.md` (not yet
+   sourced).

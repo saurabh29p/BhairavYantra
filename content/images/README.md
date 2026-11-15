@@ -11,13 +11,15 @@ schema in `docs/00-concept.md` §4.7A. No record, no image.
 - **Dedication:** only verses quoted verbatim from scripture, with source. Nothing composed.
 
 ## Worklist (status: candidates not yet found)
+
+Main temples per deity, with sources: `research/13-temples.md`. Do not link the domain that file warns about.
 | # | For | What to look for | Status |
 |---|---|---|---|
 | 1 | Home | Baṭuka Bhairava: temple mūrti photo (e.g. Baṭuka Bhairava temple, Kāśī) or museum sculpture/painting | To find |
 | 2 | Home | Mā Kālī: temple mūrti photo (e.g. Kālīghāṭ, Dakṣiṇeśvar) or museum sculpture/painting | To find |
 | 3 | Kāla Bhairava | Kāla Bhairava temple, Vārāṇasī; Kāla Bhairava temple, Ujjain | To find |
-| 4 | Aṣṭa Bhairavas | Temples associated with each of the eight (per research file 02) | Waiting on research |
-| 5 | Daśa Mahāvidyās | Main temple per Mahāvidyā (per research file 09) | Waiting on research |
+| 4 | Aṣṭa Bhairavas | Temples associated with each of the eight (research/02, research/13) | Waiting on research |
+| 5 | Daśa Mahāvidyās | Main temple per Mahāvidyā (per research/13-temples.md) | To find |
 
 Which temples count as "main" for each deity must come from the research files (with
 source), not from guesswork.
