@@ -53,6 +53,8 @@ Full concept: docs/00-concept.md. Research rules: docs/01-methodology-and-source
   Corrections, A–Z index, and empty-state templates for every content type.
 
 ## Design tokens
+Full guide: docs/03-visual-design.md. Never alter deity images (no filters, AI upscaling or
+crops through head or feet). Never write the dedication (samarpaṇa) text yourself.
 Night blue-black background in dark mode, ash-grey neutrals, one vermilion accent,
 gold for yantra lines only. Light and dark modes designed separately. Generous line
 height for Devanāgarī. No horror/sensational imagery.
@@ -69,6 +71,8 @@ height for Devanāgarī. No horror/sensational imagery.
   building anything.
 - `docs/01-methodology-and-sources.md` — evidence grades (A, A-w, B, C, D, ⚠) and rules.
   These are the law for all content.
+- `docs/03-visual-design.md` — the visual style and how deity images are presented
+  (darśana hero, gallery, colour, typography, dedication page). Follow it for every UI task.
 - `docs/02-roadmap.md` — the build order, phase by phase. Work on one phase at a time and
   only when the owner asks.
 - `research/` — the owner's research files. This is the ONLY source of religious content.

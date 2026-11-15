@@ -45,7 +45,8 @@ pull request, then move to the next. The phases follow the "rings" in `00-concep
 
 ## Phase 4A — Deity images / देवताओं के चित्र
 **Prompt:**
-> Build the DeityImage and DeityGallery components from concept §7A: bilingual caption,
+> Build the DarshanHero, DeityGallery and ViewingRoom components following
+> docs/03-visual-design.md §2–§3 and concept §7A: bilingual caption,
 > credit line, "Image details" record, and galleries ordered by period. Use astro:assets for
 > optimised responsive images. Add the images listed in content/images/ (I will supply the
 > files and their records). Do not download or add any image yourself. Open a pull request
@@ -54,6 +55,11 @@ pull request, then move to the next. The phases follow the "rings" in `00-concep
 **Before this phase:** collect images and fill one record per image (source, place, period,
 location, licence). Good starting places: museum open-access collections and Wikimedia
 Commons. Plates from Gopinatha Rao's *Elements of Hindu Iconography* are public domain.
+
+## Phase 4B — Dedication page / समर्पण
+**Prompt:**
+> Build the Samarpaṇa page and footer link following docs/03-visual-design.md §8, using the
+> dedication text and maṅgala verse in content/samarpana.md (I will write it).
 
 ## Phase 5 — Deploy / प्रकाशन
 **Prompt:**
