@@ -1,0 +1,190 @@
+---
+/**
+ * The yantra-form map as stepped concentric layers, from the bindu outward (concept §2.4).
+ * mode="steps": each layer is a disclosure, the bindu open; used on phones instead of the
+ *   diagram ("tap the bindu, the next ring opens").
+ * mode="list": every layer open, each slot with an id; the /yantra/ page, and the target of
+ *   slots that are still in preparation.
+ */
+import Bi from './Bi.astro';
+import Pending from './Pending.astro';
+import YantraNote from './YantraNote.astro';
+import { UI } from '../i18n/ui';
+import { layersInOrder, loadYantra, slotHref } from '../lib/yantra';
+
+interface Props {
+  mode: 'steps' | 'list';
+}
+const { mode } = Astro.props;
+const layers = layersInOrder(loadYantra());
+const n = layers.length;
+---
+<ol class:list={['yantra-layers', `yantra-layers--${mode}`]} role="list">
+  {layers.map((layer, i) => {
+    const Wrapper = mode === 'steps' ? 'details' : 'section';
+    return (
+      <li class="layer" style={`--depth:${i}`}>
+        <Wrapper class="layer__box" open={mode === 'steps' && i === 0 ? true : undefined} id={mode === 'list' ? `layer-${layer.id}` : undefined}>
+          {mode === 'steps' ? (
+            <summary class="layer__head">
+              <svg class="layer__rings" viewBox="0 0 40 40" aria-hidden="true">
+                {layers.map((_, k) => (
+                  <circle cx="20" cy="20" r={3 + (k * 16) / Math.max(n - 1, 1)} class:list={{ current: k === i }} />
+                ))}
+              </svg>
+              <span class="layer__names">
+                <span lang="sa" class="layer__sa">{layer.label_sa}</span>{' '}
+                <span lang="en">{layer.label_en}</span>
+              </span>
+              <span class="layer__holds"><Bi en={layer.holds_en} hi={layer.holds_hi ?? undefined} /></span>
+            </summary>
+          ) : (
+            <h2 class="layer__head">
+              <span lang="sa" class="layer__sa">{layer.label_sa}</span>{' '}
+              <span lang="en">{layer.label_en}</span>{' '}
+              <span class="layer__holds"><Bi en={layer.holds_en} hi={layer.holds_hi ?? undefined} /></span>
+            </h2>
+          )}
+          <div class="layer__body">
+            {layer.variant_note && <YantraNote note={layer.variant_note} />}
+            <ul class="slots" role="list">
+              {layer.slots.map((s) => {
+                const dev = s.label_sa ?? s.label_hi;
+                const devLang = s.label_sa ? 'sa' : 'hi';
+                const latin = s.label_iast && s.label_iast !== s.label_en ? `${s.label_iast} — ${s.label_en}` : s.label_en;
+                const inner = (
+                  <>
+                    {dev && <span lang={devLang} class="slot__dev">{dev}</span>}{' '}
+                    <span lang={s.label_iast ? 'sa-Latn' : 'en'} class="slot__lat">{latin}</span>
+                  </>
+                );
+                const linked = mode === 'steps' || s.status === 'ready';
+                return (
+                  <li class:list={['slot', `slot--${s.status}`]} id={mode === 'list' ? `slot-${s.slot}` : undefined}>
+                    {linked ? <a href={slotHref(s)}>{inner}</a> : <span>{inner}</span>}
+                    {s.status !== 'ready' && <span class="tag"><Bi label={UI.inPreparation} /></span>}
+                    {s.label_hi === null && <span class="slot__pending"><Pending what="Hindi label" /></span>}
+                    {s.variant_note && <YantraNote note={s.variant_note} />}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </Wrapper>
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .yantra-layers {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .layer__box {
+    border: 1px solid var(--rule);
+    border-inline-start: 2px solid var(--gold);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-3);
+    background: var(--bg);
+  }
+  /* Stepped: each ring sits a little further out, like the layers of the map. */
+  .yantra-layers--steps .layer {
+    margin-inline: calc((6 - var(--depth)) * 0.35rem);
+  }
+  .layer__head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 var(--space-3);
+    align-items: center;
+    padding: var(--space-3) var(--space-4);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+  }
+  summary.layer__head {
+    cursor: pointer;
+    min-height: 3rem;
+  }
+  h2.layer__head {
+    grid-template-columns: 1fr;
+  }
+  .layer__names {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-2);
+    align-items: baseline;
+  }
+  .layer__sa {
+    font-size: 1.2em;
+  }
+  .layer__holds {
+    grid-column: 1 / -1;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+  }
+  summary .layer__holds {
+    grid-column: 2;
+  }
+  .layer__rings {
+    width: 2.25rem;
+    height: 2.25rem;
+    grid-row: span 2;
+  }
+  .layer__rings circle {
+    fill: none;
+    stroke: var(--rule);
+    stroke-width: 1;
+  }
+  .layer__rings circle.current {
+    stroke: var(--gold);
+    stroke-width: 2.5;
+  }
+  .layer__body {
+    padding: 0 var(--space-4) var(--space-3);
+  }
+  .slots {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-2) var(--space-4);
+  }
+  .slot {
+    padding-block: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+  .slot a,
+  .slot > span:first-child {
+    display: flex;
+    flex-direction: column;
+    min-height: 2.75rem;
+    justify-content: center;
+  }
+  .slot__dev {
+    font-size: 1.15rem;
+  }
+  .slot__lat {
+    font-size: 0.95rem;
+  }
+  .slot--in-preparation a {
+    color: var(--ink);
+    text-decoration-color: var(--rule);
+  }
+  .slot__pending {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: var(--space-1);
+  }
+  .slot .tag {
+    margin-top: var(--space-1);
+  }
+  :target {
+    outline: 2px solid var(--sindura);
+    outline-offset: 2px;
+  }
+</style>

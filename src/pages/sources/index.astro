@@ -1,19 +1,44 @@
 ---
+/**
+ * Sources & Method (bhūpura gate 2). The body is docs/01-methodology-and-sources.md, shown
+ * without changing its wording (see src/lib/doc-html.ts for the only adjustments).
+ */
 import Bi from '../../components/Bi.astro';
-import PageHeading from '../../components/PageHeading.astro';
-import Pending from '../../components/Pending.astro';
 import { UI } from '../../i18n/ui';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { prepareDocHtml } from '../../lib/doc-html';
+import * as methodology from '../../../docs/01-methodology-and-sources.md';
+
+const html = prepareDocHtml(await methodology.compiledContent(), {
+  anchors: [{ match: /Evidence grades/, id: 'grades' }],
+});
 ---
 <BaseLayout title={UI.sources.en} titleHi={UI.sources.hi}>
-  <PageHeading en={UI.sources.en} hi={UI.sources.hi} />
-  <Pending block what="Sources & Method page, built in Phase 1 from docs/01-methodology-and-sources.md without changing its wording" />
-  <h2 id="grades"><Bi label={UI.grades} /></h2>
-  <p>A · A‑w · B · C · D · ⚠</p>
-  <Pending block what="Grade definitions (GradeLegend, Phase 2), from methodology §2" />
-  <ul class="entry-list">
-    <li><a href="/sources/bibliography/"><Bi label={UI.bibliography} /></a></li>
-    <li><a href="/claims/"><Bi label={UI.claims} /></a></li>
-    <li><a href="/corrections/"><Bi label={UI.corrections} /></a></li>
-  </ul>
+  <article class="doc" set:html={html} />
+  <hr />
+  <nav aria-labelledby="sources-more">
+    <h2 id="sources-more"><Bi en="On this site" hi="इस साइट पर" /></h2>
+    <ul class="entry-list">
+      <li><a href="/sources/bibliography/"><Bi label={UI.bibliography} /></a></li>
+      <li><a href="/claims/"><Bi label={UI.claims} /></a></li>
+      <li><a href="/corrections/"><Bi label={UI.corrections} /></a></li>
+    </ul>
+  </nav>
+  <p class="muted"><span lang="en">Source: docs/01-methodology-and-sources.md in the project repository, shown as written.</span></p>
 </BaseLayout>
+
+<style>
+  .doc :global(table) {
+    font-size: 0.95rem;
+    display: block;
+    overflow-x: auto;
+  }
+  .doc :global(h1) {
+    font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.2rem);
+  }
+  .doc :global(blockquote) {
+    margin-inline: 0;
+    padding-inline-start: var(--space-4);
+    border-inline-start: 2px solid var(--gold);
+  }
+</style>

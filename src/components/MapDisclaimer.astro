@@ -1,0 +1,24 @@
+---
+/**
+ * The one-line statement concept §2.1 asks for: the home diagram is a navigational design,
+ * not the ritual yantra of any text. The English follows concept §2.1; the Hindi is pending.
+ */
+import Pending from './Pending.astro';
+---
+<p class="map-disclaimer">
+  <span lang="en">A navigational design built from the common elements of yantras (bindu, trikoṇa, aṣṭadala, vṛtta, bhūpura), not the ritual yantra of any specific text.</span>
+  <Pending what="Hindi wording of this statement" />
+</p>
+
+<style>
+  .map-disclaimer {
+    font-size: 0.92rem;
+    color: var(--ink-muted);
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+  .map-disclaimer > span[lang='en'] {
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+</style>

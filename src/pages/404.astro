@@ -4,7 +4,7 @@ import PageHeading from '../components/PageHeading.astro';
 import { UI } from '../i18n/ui';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Page not found" titleHi="पृष्ठ नहीं मिला">
+<BaseLayout title="Page not found" titleHi="पृष्ठ नहीं मिला" searchable={false}>
   <PageHeading en="Page not found" hi="पृष्ठ नहीं मिला" />
   <p>
     <a href="/"><Bi label={UI.home} /></a> ·

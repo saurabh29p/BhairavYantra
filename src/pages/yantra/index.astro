@@ -1,0 +1,16 @@
+---
+/**
+ * The yantra-form map as a plain list, layer by layer from the bindu outward, with the
+ * sources each layer follows. Slots still in preparation link here from the diagram.
+ */
+import MapDisclaimer from '../../components/MapDisclaimer.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import YantraLayers from '../../components/YantraLayers.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Yantra-form map" titleHi="यंत्र-रूप मानचित्र">
+  <PageHeading en="Yantra-form map" hi="यंत्र-रूप मानचित्र" />
+  <MapDisclaimer />
+  <p class="muted"><span lang="en">From the centre outward. Names that link go to their pages; the others are in preparation.</span></p>
+  <YantraLayers mode="list" />
+</BaseLayout>

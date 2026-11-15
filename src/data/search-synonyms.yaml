@@ -1,0 +1,5 @@
+# Spelling variants that search treats as the same word (concept §9). Each group is one
+# entity. Names on the yantra-form map and each entry's name and `spellings` field are added
+# automatically when the site is built; list here only what those do not cover.
+groups:
+  - [Bhairava, Bhairav, bhairav, भैरव, Bhairo]   # concept §9

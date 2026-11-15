@@ -14,8 +14,10 @@ interface Props {
   wide?: boolean;
   /** Keep the page out of search engines (developer pages). */
   noindex?: boolean;
+  /** Include the page in the site's own search index (Pagefind). */
+  searchable?: boolean;
 }
-const { title, titleHi, description, wide = false, noindex = false } = Astro.props;
+const { title, titleHi, description, wide = false, noindex = false, searchable = !noindex } = Astro.props;
 const isHome = Astro.url.pathname === '/';
 const fullTitle = isHome
   ? `${SITE.hi} · ${SITE.en}`
@@ -43,7 +45,7 @@ const fullTitle = isHome
   </head>
   <body>
     <SiteHeader />
-    <main id="main" tabindex="-1" class:list={['container', { 'container--wide': wide }]}>
+    <main id="main" tabindex="-1" class:list={['container', { 'container--wide': wide }]} data-pagefind-body={searchable ? '' : undefined} data-pagefind-meta={searchable ? `title:${titleHi && titleHi !== title ? `${title} · ${titleHi}` : title}` : undefined}>
       <slot />
     </main>
     <SiteFooter />

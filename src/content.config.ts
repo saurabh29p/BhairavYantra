@@ -19,5 +19,7 @@ export const collections = {
   mantra: defineCollection({ loader: at(C.mantra), schema: C.mantra.schema }),
   claim: defineCollection({ loader: at(C.claim), schema: C.claim.schema }),
   image: defineCollection({ loader: at(C.image), schema: C.image.schema }),
+  glossary: defineCollection({ loader: at(C.glossary), schema: C.glossary.schema }),
+  correction: defineCollection({ loader: at(C.correction), schema: C.correction.schema }),
   edition: defineCollection({ loader: file(`${root}/${C.edition.path}`), schema: C.edition.schema }),
 };

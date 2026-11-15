@@ -1,0 +1,121 @@
+# The yantra-form map (concept §3). Schema: src/schemas/yantra.ts.
+#
+# A navigational design built from the common elements of yantras, not the ritual yantra of
+# any text (concept §2.1). Names come only from the research files:
+#   - Aṣṭa Bhairavas: research/02-ashta-bhairavas.md, §2 table (IAST and नाम columns)
+#   - Daśa Mahāvidyās: research/09-dasha-mahavidyas.md, §1 table (Kinsley order)
+#   - Layer names and what they hold: docs/00-concept.md §3 and the Hindi सार
+# label_hi: null means the Hindi wording is still needed; it is shown as <Pending>.
+# status: ready links to href; in-preparation is shown and links to its entry on /yantra/.
+
+layers:
+  - id: bindu
+    label_sa: बिन्दु
+    label_iast: Bindu
+    label_en: Bindu
+    holds_en: Bhairava as principle
+    holds_hi: भैरव-तत्त्व
+  - id: trikona
+    label_sa: त्रिकोण
+    label_iast: Trikoṇa
+    label_en: Trikoṇa
+    holds_en: "The three pillars: Devatā · Grantha · Paramparā"
+    holds_hi: "तीन स्तंभ: देवता, ग्रंथ, परंपरा"
+  - id: astadala
+    label_sa: अष्टदल
+    label_iast: Aṣṭadala
+    label_en: Aṣṭadala (8 petals)
+    holds_en: Aṣṭa Bhairavas
+    holds_hi: अष्ट भैरव
+    variant_note:
+      en: >-
+        The eight names as given in the listing verse read online. We have not yet found
+        them in a primary text with chapter and verse. Positions on this map follow the order
+        of the verse; they are not directions.
+      hi: null
+      sources:
+        - key: pavitragranth-ashtabhairava
+          grade: D
+          note: Graded D ⚠ in research/02 §1; the page names no source text.
+  - id: dasa-disa
+    label_sa: दश दिशाएँ
+    label_en: Ten directions
+    holds_en: Daśa Mahāvidyās
+    holds_hi: दश महाविद्याएँ
+    variant_note:
+      en: >-
+        Shown in the order of the list most often given in modern scholarship, following
+        David Kinsley. The order varies between texts, and the directions given in the Satī
+        episode are not yet verified. Positions on this map are not directions.
+      hi: null
+      sources:
+        - key: kinsley-1997
+          location: pp. ix, 1
+          grade: C
+          note: As cited on Wikipedia, "Mahavidya" (research/09 §1).
+  - id: vrtta
+    label_sa: वृत्त
+    label_iast: Vṛtta
+    label_en: Vṛtta (enclosing circles)
+    holds_en: Bhairavīs and the wider Śakti world
+    holds_hi: null
+  - id: bhupura
+    label_sa: भूपुर
+    label_iast: Bhūpura
+    label_en: Bhūpura (square with four gates)
+    holds_en: The four gates
+    holds_hi: "भूपुर के चार द्वार (खोज, स्रोत-पद्धति, शब्दकोश, परिचय)"
+
+slots:
+  # Bindu
+  - { slot: bhairava, layer: bindu, label_sa: भैरव, label_iast: Bhairava, label_hi: भैरव, label_en: Bhairava, href: /devata/bhairava/, status: in-preparation }
+
+  # Trikoṇa: the three pillars
+  - { slot: devata, layer: trikona, label_iast: Devatā, label_hi: देवता, label_en: Deities and forms, href: /devata/, status: ready }
+  - { slot: grantha, layer: trikona, label_iast: Grantha, label_hi: ग्रंथ, label_en: Texts, href: /grantha/, status: ready }
+  - { slot: parampara, layer: trikona, label_iast: Paramparā, label_hi: परंपरा, label_en: "Traditions, sādhakas, places", href: /parampara/, status: ready }
+
+  # Aṣṭadala: in the order of the listing verse (research/02 §1–2)
+  - { slot: asitanga, layer: astadala, label_sa: असिताङ्ग, label_iast: Asitāṅga, label_hi: असिताङ्ग, label_en: Asitāṅga, href: /devata/asitanga/, status: in-preparation }
+  - { slot: ruru, layer: astadala, label_sa: रुरु, label_iast: Ruru, label_hi: रुरु, label_en: Ruru, href: /devata/ruru/, status: in-preparation }
+  - { slot: canda, layer: astadala, label_sa: चण्ड, label_iast: Caṇḍa, label_hi: चण्ड, label_en: Caṇḍa, href: /devata/canda/, status: in-preparation }
+  - { slot: krodha, layer: astadala, label_sa: क्रोध, label_iast: Krodha, label_hi: क्रोध, label_en: Krodha, href: /devata/krodha/, status: in-preparation }
+  - { slot: unmatta, layer: astadala, label_sa: उन्मत्त, label_iast: Unmatta, label_hi: उन्मत्त, label_en: Unmatta, href: /devata/unmatta/, status: in-preparation }
+  - slot: kapala
+    layer: astadala
+    label_sa: कपाल
+    label_iast: Kapāla
+    label_hi: कपाल
+    label_en: Kapāla
+    href: /devata/kapala/
+    status: in-preparation
+    variant_note:
+      en: The listing verse has कपाली (Kapālī); the comparative table in research/02 has कपाल (Kapāla).
+      hi: null
+      sources:
+        - key: pavitragranth-ashtabhairava
+          grade: D
+          note: Graded D ⚠ in research/02 §1.
+  - { slot: bhisana, layer: astadala, label_sa: भीषण, label_iast: Bhīṣaṇa, label_hi: भीषण, label_en: Bhīṣaṇa, href: /devata/bhisana/, status: in-preparation }
+  - { slot: samhara, layer: astadala, label_sa: संहार, label_iast: Saṃhāra, label_hi: संहार, label_en: Saṃhāra, href: /devata/samhara/, status: in-preparation }
+
+  # Ten directions: in Kinsley's order (research/09 §1)
+  - { slot: kali, layer: dasa-disa, label_sa: काली, label_iast: Kālī, label_hi: काली, label_en: Kālī, href: /devata/kali/, status: in-preparation }
+  - { slot: tara, layer: dasa-disa, label_sa: तारा, label_iast: Tārā, label_hi: तारा, label_en: Tārā, href: /devata/tara/, status: in-preparation }
+  - { slot: tripurasundari, layer: dasa-disa, label_sa: त्रिपुरसुन्दरी (षोडशी), label_iast: Tripurasundarī (Ṣoḍaśī), label_hi: त्रिपुरसुन्दरी (षोडशी), label_en: Tripurasundarī (Ṣoḍaśī), href: /devata/tripurasundari/, status: in-preparation }
+  - { slot: bhuvanesvari, layer: dasa-disa, label_sa: भुवनेश्वरी, label_iast: Bhuvaneśvarī, label_hi: भुवनेश्वरी, label_en: Bhuvaneśvarī, href: /devata/bhuvanesvari/, status: in-preparation }
+  - { slot: bhairavi, layer: dasa-disa, label_sa: भैरवी, label_iast: Bhairavī, label_hi: भैरवी, label_en: Bhairavī, href: /devata/bhairavi/, status: in-preparation }
+  - { slot: chinnamasta, layer: dasa-disa, label_sa: छिन्नमस्ता, label_iast: Chinnamastā, label_hi: छिन्नमस्ता, label_en: Chinnamastā, href: /devata/chinnamasta/, status: in-preparation }
+  - { slot: dhumavati, layer: dasa-disa, label_sa: धूमावती, label_iast: Dhūmāvatī, label_hi: धूमावती, label_en: Dhūmāvatī, href: /devata/dhumavati/, status: in-preparation }
+  - { slot: bagalamukhi, layer: dasa-disa, label_sa: बगलामुखी, label_iast: Bagalāmukhī, label_hi: बगलामुखी, label_en: Bagalāmukhī, href: /devata/bagalamukhi/, status: in-preparation }
+  - { slot: matangi, layer: dasa-disa, label_sa: मातङ्गी, label_iast: Mātaṅgī, label_hi: मातङ्गी, label_en: Mātaṅgī, href: /devata/matangi/, status: in-preparation }
+  - { slot: kamala, layer: dasa-disa, label_sa: कमला (कमलात्मिका), label_iast: Kamalā (Kamalātmikā), label_hi: कमला (कमलात्मिका), label_en: Kamalā (Kamalātmikā), href: /devata/kamala/, status: in-preparation }
+
+  # Vṛtta
+  - { slot: bhairavis, layer: vrtta, label_hi: null, label_en: Bhairavīs and the wider Śakti world, href: /vrtta/, status: in-preparation }
+
+  # Bhūpura: the four gates (concept §3; Hindi from the concept's सार)
+  - { slot: gate-search, layer: bhupura, label_hi: खोज, label_en: Search & A–Z index, href: /search/, status: ready }
+  - { slot: gate-sources, layer: bhupura, label_hi: स्रोत-पद्धति, label_en: Sources & Method, href: /sources/, status: ready }
+  - { slot: gate-glossary, layer: bhupura, label_hi: शब्दकोश, label_en: Glossary, href: /glossary/, status: ready }
+  - { slot: gate-about, layer: bhupura, label_hi: परिचय, label_en: About & Ethics, href: /about/, status: ready }

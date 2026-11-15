@@ -1,3 +1,23 @@
 # The single bibliography (concept §4.8). Every citation key on the site is the id of an entry
-# here. Schema: src/schemas/edition.ts. Entries are added when research is migrated (Phase 3).
-[]
+# here. Schema: src/schemas/edition.ts. Details are copied from the research files named in
+# each note; nothing is added from memory.
+
+- id: kinsley-1997
+  kind: scholarly-work
+  title: "Tantric Visions of the Divine Feminine: The Ten Mahāvidyās"
+  short: Kinsley 1997
+  authors: [David Kinsley]
+  year: 1997
+  details_confirmed: false
+  note: >-
+    Cited in research/09-dasha-mahavidyas.md as given on Wikipedia, "Mahavidya"; publisher
+    and pages not yet checked in the book.
+
+- id: pavitragranth-ashtabhairava
+  kind: website
+  title: Aṣṭabhairava Dhyānastotram (pavitragranth.com)
+  short: pavitragranth.com
+  url: https://pavitragranth.com/stotras/ashta-bhairava-dhyana-stotram
+  note: >-
+    Read in research/02-ashta-bhairavas.md §1. The page states no source text, only
+    "मूल पाठ: पारंपरिक धार्मिक स्रोत".

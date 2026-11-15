@@ -1,0 +1,30 @@
+---
+/** A variant note on the yantra-form map: what the layer follows, with its citations. */
+import CitationText from './CitationText.astro';
+import Pending from './Pending.astro';
+import type { Citation } from '../schemas/common';
+
+interface Props {
+  note: { en: string; hi: string | null; sources: Citation[] };
+}
+const { note } = Astro.props;
+---
+<div class="yantra-note">
+  <p lang="en">
+    {note.en}
+    {note.sources.map((c) => <> <CitationText c={c} />{c.note && <span class="muted"> ({c.note})</span>}</>)}
+  </p>
+  {note.hi ? <p lang="hi">{note.hi}</p> : <p><Pending what="Hindi wording of this note" /></p>}
+</div>
+
+<style>
+  .yantra-note {
+    font-size: 0.92rem;
+    border-inline-start: 2px solid var(--gold);
+    padding-inline-start: var(--space-3);
+    margin-block: var(--space-2) var(--space-4);
+  }
+  .yantra-note p {
+    margin-bottom: var(--space-2);
+  }
+</style>

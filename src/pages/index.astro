@@ -1,7 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import Bi from '../components/Bi.astro';
+import MapDisclaimer from '../components/MapDisclaimer.astro';
 import Pending from '../components/Pending.astro';
+import YantraLayers from '../components/YantraLayers.astro';
+import YantraMap from '../components/YantraMap.astro';
 import { NAV } from '../data/nav';
 import { SITE, UI } from '../i18n/ui';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -12,10 +15,10 @@ const counts: Record<string, number> = {
   '/parampara/': (await getCollection('person')).length + (await getCollection('place')).length,
 };
 ---
-<BaseLayout title={SITE.en} titleHi={SITE.hi}>
+<BaseLayout title={SITE.en} titleHi={SITE.hi} wide>
   <section class="hero" aria-labelledby="site-title">
     <h1 id="site-title">
-      <span lang="hi" class="hero__hi">{SITE.hi}</span>
+      <span lang="hi" class="hero__hi">{SITE.hi}</span>{' '}
       <span lang="en" class="hero__en">{SITE.en}</span>
     </h1>
     <!-- Wording from README.md. -->
@@ -27,9 +30,15 @@ const counts: Record<string, number> = {
     <p><Pending what="Hindi description of the site, in the owner's words" /></p>
   </section>
 
-  <section class="map-placeholder" aria-labelledby="map-heading">
+  <section class="map" aria-labelledby="map-heading">
     <h2 id="map-heading"><Bi en="Yantra-form map" hi="यंत्र-रूप मानचित्र" stack /></h2>
-    <p class="muted"><Bi label={UI.inPreparation} /></p>
+    <MapDisclaimer />
+    <div class="map__diagram"><YantraMap /></div>
+    <div class="map__steps"><YantraLayers mode="steps" /></div>
+    <p class="map__legend muted">
+      <span lang="en">Names in bold link to their pages; the others are in preparation.</span>
+      <a href="/yantra/" lang="en">The map as a list, with its sources</a>
+    </p>
   </section>
 
   <section aria-labelledby="sections-heading">
@@ -72,17 +81,37 @@ const counts: Record<string, number> = {
     max-width: 36rem;
     margin-inline: auto;
   }
-  .map-placeholder {
-    text-align: center;
-    border-block: 1px solid var(--gold);
-    padding-block: var(--space-6);
+  .map {
     margin-block: var(--space-8);
-    background: radial-gradient(closest-side, var(--glow), transparent);
+    text-align: center;
   }
-  .map-placeholder h2 {
+  .map h2 {
     margin-top: 0;
   }
-  .map-placeholder p {
-    margin-bottom: 0;
+  .map__steps {
+    display: none;
+    text-align: start;
+  }
+  .map__legend {
+    font-size: 0.92rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2) var(--space-4);
+  }
+  @media (max-width: 47.99rem) {
+    .map__diagram {
+      display: none;
+    }
+    .map__steps {
+      display: block;
+    }
+    .map__legend > span {
+      display: none;
+    }
+  }
+  section[aria-labelledby='sections-heading'] {
+    max-width: var(--measure);
+    margin-inline: auto;
   }
 </style>
