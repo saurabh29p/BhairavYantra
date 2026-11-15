@@ -18,10 +18,15 @@ Full concept: docs/00-concept.md. Research rules: docs/01-methodology-and-source
 4. Never label a text "lost", "recovered" or "ancient" unless its registry entry has the
    matching status and evidence (see concept §5).
 5. No AI-generated images of deities. No audio. No ads, trackers or shop features.
+6. Real deity images (temple mūrtis, sculptures, manuscript paintings, old book plates)
+   are wanted, but every image needs an Image record with source, place, period,
+   current location, licence and attribution (concept §4.7A, §7A). Never add an image
+   that has no such record, and never download images yourself without the owner
+   approving the source and licence.
 
 ## Stack
 - Astro (latest stable) + Content Collections + MDX, TypeScript strict.
-- Zod schemas for: devata, grantha, passage, mantra, person, place, claim, edition.
+- Zod schemas for: devata, grantha, passage, mantra, person, place, claim, edition, image.
   Required fields as in concept §4.
 - Pagefind for search, with a synonyms file for spelling variants
   (Bhairav/Bhairava/भैरव/Bhairo …) and IAST→ASCII folding.
