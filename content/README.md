@@ -14,6 +14,8 @@ run `npm run check:content` to see the problems.
 | `mantra/` | Mantra (§4.4) | `.yaml` | mantra |
 | `claim/` | Claims register (§4.7) | `.yaml` | claim |
 | `images/` | Image records (§4.7A) | `.yaml` next to the image file | image |
+| `glossary/` | Glossary (§3, gate 3) | `.yaml` | term, with sources |
+| `correction/` | Corrections log (§6.6) | `.yaml` | correction, with the source that justified it |
 | `bibliography.yaml` | Edition (§4.8) | one YAML list | — every citation key is an `id` here |
 
 File names become ids and URLs: lowercase ASCII words joined by hyphens
@@ -42,3 +44,13 @@ visible placeholder instead of being filled in:
 ```
 
 Markdown images (`![]()`) are not allowed; images need a record in `images/`.
+
+## The yantra-form map
+`src/data/yantra.yaml` holds the map's layers and slots (schema: `src/schemas/yantra.ts`).
+Set a slot's `status` to `ready` once its page exists; until then it shows as "in preparation".
+Layers that follow one variant of a list (aṣṭadala, ten directions) must say which, with
+citations, in `variant_note`.
+
+## Search spellings
+`src/data/search-synonyms.yaml` lists spellings that search treats as the same word. Names on
+the map and each entry's names and `spellings` are added automatically.

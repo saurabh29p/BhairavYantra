@@ -13,6 +13,7 @@ const items: Item[] = [
   ...(await getCollection('grantha')).map((e) => ({ href: `/grantha/${e.id}/`, latin: e.data.name_iast, sa: e.data.name_sa, kind: UI.grantha.en })),
   ...(await getCollection('person')).map((e) => ({ href: `/parampara/person/${e.id}/`, latin: e.data.name_iast, sa: e.data.name_sa, kind: UI.person.en })),
   ...(await getCollection('place')).map((e) => ({ href: `/parampara/place/${e.id}/`, latin: e.data.name_iast, sa: e.data.name_sa, kind: UI.place.en })),
+  ...(await getCollection('glossary')).map((e) => ({ href: `/glossary/#term-${e.id}`, latin: e.data.term_iast, sa: e.data.term_sa, kind: UI.glossary.en })),
 ].sort(byIast((i) => i.latin));
 
 const groups = new Map<string, Item[]>();

@@ -9,7 +9,7 @@ interface Props {
 const { en, hi, hiLang = 'hi' } = Astro.props;
 ---
 <h1 class="page-heading">
-  {hi && <span lang={hiLang} class="page-heading__hi">{hi}</span>}
+  {hi && <span lang={hiLang} class="page-heading__hi">{hi}</span>}{hi && ' '}
   <span lang="en" class="page-heading__en">{en}</span>
 </h1>
 

@@ -1,0 +1,7 @@
+date: 2026-11-15
+page: /devata/fixture-devata/
+summary_en: Fixture correction summary.
+summary_hi: परीक्षण सुधार।
+source: { key: fixture-print, location: "1.5", grade: A }
+credit: Fixture reader
+change_url: https://example.org/change

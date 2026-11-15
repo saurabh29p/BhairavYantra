@@ -14,6 +14,9 @@ const [dir = 'dist', out = 'screenshots', ...paths] = process.argv.slice(2);
 if (paths.length === 0) paths.push('/');
 mkdirSync(out, { recursive: true });
 
+/** Long pages are cut at this height (CSS px) to keep screenshots small. */
+const MAX_HEIGHT = 2400;
+
 const VIEWPORTS = [
   { name: 'desktop', width: 1280, height: 900, isMobile: false },
   { name: 'phone', width: 390, height: 844, isMobile: true },
@@ -23,7 +26,8 @@ const browser = await chromium.launch(
   process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {},
 );
 const { url, server } = await serve(dir);
-const slug = (p: string) => p.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home';
+const slug = (p: string) =>
+  p.replace(/^\/|\/$/g, '').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase() || 'home';
 
 for (const vp of VIEWPORTS) {
   for (const scheme of ['light', 'dark'] as const) {
@@ -37,10 +41,11 @@ for (const vp of VIEWPORTS) {
     });
     const page = await context.newPage();
     for (const p of paths) {
-      await page.goto(url + p, { waitUntil: 'load' });
+      await page.goto(url + p, { waitUntil: 'networkidle' });
       await page.evaluate(() => document.fonts.ready);
       const file = path.join(out, `${slug(p)}-${vp.name}-${scheme}.jpg`);
-      await page.screenshot({ path: file, fullPage: true, type: 'jpeg', quality: 70 });
+      const height = Math.min(MAX_HEIGHT, await page.evaluate(() => document.documentElement.scrollHeight));
+      await page.screenshot({ path: file, fullPage: true, clip: { x: 0, y: 0, width: vp.width, height }, type: 'jpeg', quality: 70 });
       console.log(file);
     }
     await context.close();

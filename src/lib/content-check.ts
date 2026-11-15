@@ -14,7 +14,8 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
-import { COLLECTIONS, contentRoot, type CollectionName } from '../schemas';
+import { COLLECTIONS, contentRoot, yantraFile, type CollectionName } from '../schemas';
+import { yantraSchema } from '../schemas/yantra';
 import { ID_PATTERN } from '../schemas/common';
 import { GRADE_A_KINDS, type Edition } from '../schemas/edition';
 import { lintMdx } from './citation-lint';
@@ -204,7 +205,53 @@ function collectRefs(name: CollectionName, d: Record<string, any>): Ref[] {
   return refs;
 }
 
-export function checkContent(root = contentRoot()): CheckResult {
+/** Citation keys must resolve, and the grade must fit the edition kind (methodology §2). */
+function checkCitations(data: unknown, file: string, editions: Map<string, Edition>, issues: Issue[]): void {
+  const cites: Array<{ key: string; grade: string; at: string }> = [];
+  collectCitations(data, '', cites);
+  for (const c of cites) {
+    const ed = editions.get(c.key);
+    if (!ed) {
+      issues.push({ file, message: `${c.at}: citation key "${c.key}" is not in the bibliography.` });
+      continue;
+    }
+    if (c.grade === 'A' && !GRADE_A_KINDS.includes(ed.kind))
+      issues.push({
+        file,
+        message: `${c.at}: grade A needs a named printed or critical edition, but "${c.key}" is a ${ed.kind} (methodology §2; use A‑w for an online text whose edition is not named).`,
+      });
+    if (c.grade === 'A-w' && ed.kind !== 'website')
+      issues.push({
+        file,
+        message: `${c.at}: grade A‑w is for a text read online where the site does not name its edition, but "${c.key}" is a ${ed.kind} (methodology §2).`,
+      });
+  }
+}
+
+/** The yantra-form map data: schema, then its citations against the bibliography. */
+function checkYantra(file: string, editions: Map<string, Edition>, issues: Issue[]): void {
+  const rel = path.relative(process.cwd(), path.resolve(file));
+  if (!existsSync(file)) {
+    issues.push({ file: rel, message: 'Yantra map data not found.' });
+    return;
+  }
+  let raw: unknown;
+  try {
+    raw = parseYaml(readFileSync(file, 'utf8'));
+  } catch (err) {
+    issues.push({ file: rel, message: `YAML error: ${(err as Error).message}` });
+    return;
+  }
+  const result = yantraSchema.safeParse(raw);
+  if (!result.success) {
+    for (const iss of result.error.issues)
+      issues.push({ file: rel, message: `${formatPath(iss.path) || '(file)'}: ${iss.message}` });
+    return;
+  }
+  checkCitations(result.data, rel, editions, issues);
+}
+
+export function checkContent(root = contentRoot(), yantra = yantraFile()): CheckResult {
   const absRoot = path.resolve(root);
   const issues: Issue[] = [];
   const entries = Object.fromEntries(
@@ -230,25 +277,7 @@ export function checkContent(root = contentRoot()): CheckResult {
           });
       }
       // Citations: key must resolve; grade must fit the edition kind.
-      const cites: Array<{ key: string; grade: string; at: string }> = [];
-      collectCitations(entry.data, '', cites);
-      for (const c of cites) {
-        const ed = editions.get(c.key);
-        if (!ed) {
-          issues.push({ file: entry.file, message: `${c.at}: citation key "${c.key}" is not in the bibliography.` });
-          continue;
-        }
-        if (c.grade === 'A' && !GRADE_A_KINDS.includes(ed.kind))
-          issues.push({
-            file: entry.file,
-            message: `${c.at}: grade A needs a named printed or critical edition, but "${c.key}" is a ${ed.kind} (methodology §2; use A‑w for an online text whose edition is not named).`,
-          });
-        if (c.grade === 'A-w' && ed.kind !== 'website')
-          issues.push({
-            file: entry.file,
-            message: `${c.at}: grade A‑w is for a text read online where the site does not name its edition, but "${c.key}" is a ${ed.kind} (methodology §2).`,
-          });
-      }
+      checkCitations(entry.data, entry.file, editions, issues);
       // Citation lint on MDX bodies.
       if (entry.body !== undefined) {
         for (const li of lintMdx(entry.body, { editions: ids.edition, entries: ids }))
@@ -260,6 +289,8 @@ export function checkContent(root = contentRoot()): CheckResult {
       }
     }
   }
+
+  checkYantra(yantra, editions, issues);
 
   // Passages and mantras with a top-level grade also need their source edition kind to fit.
   for (const p of entries.passage) {

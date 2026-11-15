@@ -5,8 +5,10 @@
  */
 import type { z } from 'astro/zod';
 import { claimSchema } from './claim';
+import { correctionSchema } from './correction';
 import { devataSchema } from './devata';
 import { editionSchema } from './edition';
+import { glossarySchema } from './glossary';
 import { granthaSchema } from './grantha';
 import { imageSchema } from './image';
 import { mantraSchema } from './mantra';
@@ -35,6 +37,8 @@ export const COLLECTIONS = {
   mantra: { path: 'mantra', pattern: '*.{yaml,yml}', body: false, schema: mantraSchema },
   claim: { path: 'claim', pattern: '*.{yaml,yml}', body: false, schema: claimSchema },
   image: { path: 'images', pattern: '*.{yaml,yml}', body: false, schema: imageSchema },
+  glossary: { path: 'glossary', pattern: '*.{yaml,yml}', body: false, schema: glossarySchema },
+  correction: { path: 'correction', pattern: '*.{yaml,yml}', body: false, schema: correctionSchema },
   edition: { path: 'bibliography.yaml', body: false, single: true, schema: editionSchema },
 } as const satisfies Record<string, CollectionDef>;
 
@@ -43,4 +47,9 @@ export type CollectionName = keyof typeof COLLECTIONS;
 /** Content root, relative to the project. Tests and fixture builds point it elsewhere. */
 export function contentRoot(): string {
   return process.env.BY_CONTENT_ROOT ?? 'content';
+}
+
+/** The yantra-form map data. Fixture builds point it at tests/fixtures/yantra.yaml. */
+export function yantraFile(): string {
+  return process.env.BY_YANTRA_FILE ?? 'src/data/yantra.yaml';
 }

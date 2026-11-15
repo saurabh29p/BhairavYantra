@@ -1,11 +1,50 @@
 ---
+/**
+ * Corrections (concept §6.6–6.7, §10.5): the public log of corrections, each with the source
+ * that justified it, and how to suggest one. Git history is the full audit trail.
+ */
+import { getCollection } from 'astro:content';
+import Bi from '../../components/Bi.astro';
+import CitationText from '../../components/CitationText.astro';
+import EmptyState from '../../components/EmptyState.astro';
 import PageHeading from '../../components/PageHeading.astro';
 import Pending from '../../components/Pending.astro';
 import { UI } from '../../i18n/ui';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const log = (await getCollection('correction')).sort((a, b) => b.data.date.localeCompare(a.data.date));
 ---
 <BaseLayout title={UI.corrections.en} titleHi={UI.corrections.hi}>
   <PageHeading en={UI.corrections.en} hi={UI.corrections.hi} />
-  <p class="muted"><span lang="en">The public corrections log; Git history is the audit trail (concept §6.6).</span></p>
-  <Pending block what="Corrections log and the “Suggest a correction (with source)” channel (Phase 1)" />
+
+  <section aria-labelledby="suggest">
+    <h2 id="suggest"><Bi en="Suggest a correction (with source)" hi="सुधार सुझाएँ (स्रोत सहित)" /></h2>
+    <p lang="en">A suggestion needs its source: the text, the edition, the location (chapter and verse, or page), and a link or photo where possible. Suggestions without a source do not change any page.</p>
+    <Pending block what="How readers send a correction (email address, form or issue tracker): the owner's decision" />
+  </section>
+
+  <section aria-labelledby="log">
+    <h2 id="log"><Bi en="Corrections log" hi="सुधार-सूची" /></h2>
+    {log.length === 0 ? (
+      <EmptyState noteEn="Each correction made to a library page will be listed here, with its date and source." />
+    ) : (
+      <ol class="entry-list" reversed>
+        {log.map(({ data: c }) => (
+          <li>
+            <p>
+              <time datetime={c.date}>{c.date}</time> · <a href={c.page}>{c.page}</a>
+            </p>
+            <p lang="en">{c.summary_en}</p>
+            {c.summary_hi && <p lang="hi">{c.summary_hi}</p>}
+            <p class="muted">
+              <span lang="en">Source:</span> <CitationText c={c.source} />
+              {c.credit && <> · <span lang="en">Reported by</span> {c.credit}</>}
+              {c.change_url && <> · <a href={c.change_url}>change</a></>}
+            </p>
+          </li>
+        ))}
+      </ol>
+    )}
+    <p class="muted"><span lang="en">Every change to the site is also kept in its version history.</span></p>
+  </section>
 </BaseLayout>

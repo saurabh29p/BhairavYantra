@@ -1,11 +1,93 @@
 ---
+/**
+ * Glossary (bhūpura gate 3): Sanskrit terms in Devanāgarī, IAST, Hindi and English
+ * (concept §3), grouped A–Z by IAST. Terms come only from the research files, each with
+ * its sources. Entries live in content/glossary/.
+ */
+import { getCollection } from 'astro:content';
+import Bi from '../../components/Bi.astro';
+import CitationList from '../../components/CitationList.astro';
+import EmptyState from '../../components/EmptyState.astro';
 import PageHeading from '../../components/PageHeading.astro';
-import Pending from '../../components/Pending.astro';
 import { UI } from '../../i18n/ui';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { byIast, indexLetter } from '../../lib/text';
+
+const terms = (await getCollection('glossary')).sort(byIast((t) => t.data.term_iast));
+const groups = new Map<string, typeof terms>();
+for (const t of terms) {
+  const k = indexLetter(t.data.term_iast);
+  groups.set(k, [...(groups.get(k) ?? []), t]);
+}
+const letters = [...groups.keys()];
 ---
 <BaseLayout title={UI.glossary.en} titleHi={UI.glossary.hi}>
   <PageHeading en={UI.glossary.en} hi={UI.glossary.hi} />
-  <p class="muted"><span lang="en">Sanskrit terms in Devanāgarī, IAST, Hindi and English (concept §3).</span></p>
-  <Pending block what="Glossary skeleton (Phase 1); terms only from the research files" />
+  <p class="muted"><span lang="en">Sanskrit terms in Devanāgarī, IAST, Hindi and English, each with its source.</span></p>
+  {terms.length === 0 ? (
+    <EmptyState noteEn="Terms are added from the research files as they are migrated." />
+  ) : (
+    <>
+      <nav aria-label="Letters"><p class="letters">{letters.map((l) => <a href={`#letter-${l}`}>{l}</a>)}</p></nav>
+      {letters.map((l) => (
+        <section aria-labelledby={`letter-${l}`}>
+          <h2 id={`letter-${l}`}>{l}</h2>
+          <dl class="terms">
+            {groups.get(l)!.map(({ id, data: t }) => (
+              <>
+                <dt id={`term-${id}`}>
+                  <span lang="sa" class="term-sa">{t.term_sa}</span>
+                  <span lang="sa-Latn">{t.term_iast}</span>
+                  {t.term_hi && <span lang="hi">({t.term_hi})</span>}
+                  {t.term_en && <span lang="en" class="muted">— {t.term_en}</span>}
+                </dt>
+                <dd>
+                  <p lang="en">{t.gloss_en}</p>
+                  {t.gloss_hi && <p lang="hi">{t.gloss_hi}</p>}
+                  <CitationList items={t.sources} />
+                  {t.see.length > 0 && (
+                    <p class="muted"><Bi en="See" hi="देखें" />: {t.see.map((p, i) => <>{i > 0 && ', '}<a href={p}>{p}</a></>)}</p>
+                  )}
+                </dd>
+              </>
+            ))}
+          </dl>
+        </section>
+      ))}
+    </>
+  )}
 </BaseLayout>
+
+<style>
+  .letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+  .letters a {
+    min-width: 2rem;
+    min-height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .terms dt {
+    font-weight: 600;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-2);
+    align-items: baseline;
+    margin-top: var(--space-4);
+  }
+  .term-sa {
+    font-size: 1.25rem;
+  }
+  .terms dd {
+    margin: var(--space-1) 0 var(--space-4);
+    padding-inline-start: var(--space-4);
+    border-inline-start: 1px solid var(--rule);
+  }
+  .terms dd p {
+    margin-bottom: var(--space-2);
+  }
+</style>

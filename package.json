@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "build:fixtures": "BY_CONTENT_ROOT=tests/fixtures/content BY_OUT_DIR=dist-fixtures astro build",
+    "build:fixtures": "BY_CONTENT_ROOT=tests/fixtures/content BY_YANTRA_FILE=tests/fixtures/yantra.yaml BY_OUT_DIR=dist-fixtures astro build",
     "preview": "astro preview",
     "check:content": "tsx scripts/check-content.ts",
     "check:links": "tsx scripts/check-links.ts",
@@ -34,6 +34,7 @@
     "mdast-util-mdx": "^3.0.0",
     "micromark-extension-gfm": "^3.0.0",
     "micromark-extension-mdxjs": "^3.0.0",
+    "pagefind": "^1.6.0",
     "playwright": "^1.63.0",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",

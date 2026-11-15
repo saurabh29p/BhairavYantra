@@ -1,19 +1,76 @@
 ---
+/**
+ * Claims register (concept §4.7): statements that are unverified, disputed, refuted or
+ * verified, grouped by status, each with who makes it and the evidence for and against.
+ * Every ⚠ item in the research files is added here when that file is migrated (Phase 4).
+ */
 import { getCollection } from 'astro:content';
-import CollectionList from '../../components/CollectionList.astro';
+import Bi from '../../components/Bi.astro';
+import EmptyState from '../../components/EmptyState.astro';
 import PageHeading from '../../components/PageHeading.astro';
 import { UI } from '../../i18n/ui';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CLAIM_STATUSES } from '../../schemas/claim';
 
-const entries = (await getCollection('claim')).sort((a, b) => b.data.opened_on.localeCompare(a.data.opened_on));
-const items = entries.map((e) => ({
-  href: `/claims/${e.id}/`,
-  latin: e.data.statement_en ?? e.data.statement_hi ?? e.id,
-  note: `${e.data.status} · opened ${e.data.opened_on}`,
-}));
+// Hindi only where the methodology gives it (§2, the ⚠ row: "विवादित या असत्यापित").
+const STATUS: Record<(typeof CLAIM_STATUSES)[number], { en: string; hi?: string }> = {
+  unverified: { en: 'Unverified', hi: 'असत्यापित' },
+  disputed: { en: 'Disputed', hi: 'विवादित' },
+  refuted: { en: 'Refuted' },
+  verified: { en: 'Verified' },
+};
+
+const claims = (await getCollection('claim')).sort((a, b) => b.data.opened_on.localeCompare(a.data.opened_on));
+const byStatus = CLAIM_STATUSES.map((s) => ({ status: s, items: claims.filter((c) => c.data.status === s) }));
 ---
 <BaseLayout title={UI.claims.en} titleHi={UI.claims.hi}>
   <PageHeading en="Claims under review" hi={UI.claims.hi} />
-  <p class="muted"><span lang="en">Statements that are disputed or not yet verified, with the evidence for and against (concept §4.7).</span></p>
-  <CollectionList items={items} />
+  <p class="muted"><span lang="en">Statements that are disputed or not yet verified, who makes them, and the evidence for and against (concept §4.7).</span></p>
+  {claims.length === 0 ? (
+    <EmptyState noteEn="Claims from the research files are added as each file is migrated." />
+  ) : (
+    <>
+      <nav aria-label="Claims by status">
+        <ul class="status-nav" role="list">
+          {byStatus.map(({ status, items }) => (
+            <li><a href={`#status-${status}`}><Bi en={STATUS[status].en} hi={STATUS[status].hi} /></a> ({items.length})</li>
+          ))}
+        </ul>
+      </nav>
+      {byStatus.map(({ status, items }) => (
+        <section aria-labelledby={`status-${status}`}>
+          <h2 id={`status-${status}`}><Bi en={STATUS[status].en} hi={STATUS[status].hi} /> <span class="muted">({items.length})</span></h2>
+          {items.length === 0 ? (
+            <p class="muted">None.</p>
+          ) : (
+            <ul class="entry-list">
+              {items.map((c) => (
+                <li>
+                  <a href={`/claims/${c.id}/`}>
+                    {c.data.statement_en && <span lang="en">{c.data.statement_en}</span>}
+                    {c.data.statement_en && c.data.statement_hi && ' · '}
+                    {c.data.statement_hi && <span lang="hi">{c.data.statement_hi}</span>}
+                  </a>
+                  <div class="muted">
+                    {c.data.who_claims_it.map((w) => w.name).join(', ')} · opened {c.data.opened_on} ·
+                    {' '}{c.data.evidence_for.length} for, {c.data.evidence_against.length} against
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))}
+    </>
+  )}
 </BaseLayout>
+
+<style>
+  .status-nav {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+  }
+</style>

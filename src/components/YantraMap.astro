@@ -1,0 +1,319 @@
+---
+/**
+ * The yantra-form map (concept §3), drawn as hand-built SVG from src/data/yantra.yaml.
+ * Every slot is a real <a> with an accessible name. On narrow screens this diagram is hidden
+ * and <YantraLayers> shows the same slots as stepped concentric layers (CLAUDE.md "Yantra").
+ * Gold is used for the lines only (docs/03-visual-design.md §4–5).
+ */
+import {
+  C,
+  R,
+  VIEW,
+  angleOf,
+  bhupuraPath,
+  labelLines,
+  layersInOrder,
+  loadYantra,
+  petalPath,
+  polar,
+  slotHref,
+  slotName,
+  trianglePoints,
+  upperArc,
+} from '../lib/yantra';
+import type { YantraLayer, YantraSlot } from '../schemas/yantra';
+
+const yantra = loadYantra();
+const layers = layersInOrder(yantra);
+const layer = (id: string) => layers.find((l) => l.id === id);
+
+type Line = { text: string; lang: 'sa' | 'hi' | 'sa-Latn' | 'en'; cls: 'dev' | 'lat' };
+const LINE_H = { dev: 28, lat: 21 };
+
+/** Lines of a slot label: Devanāgarī first, then Latin. */
+function lines(s: YantraSlot, latin: 'iast' | 'en'): Line[] {
+  const dev = s.label_sa ?? s.label_hi;
+  const devLang = s.label_sa ? 'sa' : 'hi';
+  const lat = latin === 'iast' ? (s.label_iast ?? s.label_en) : s.label_en;
+  const latLang = latin === 'iast' && s.label_iast ? 'sa-Latn' : 'en';
+  return [
+    ...labelLines(dev).map((text) => ({ text, lang: devLang, cls: 'dev' }) as Line),
+    ...labelLines(lat).map((text) => ({ text, lang: latLang, cls: 'lat' }) as Line),
+  ];
+}
+
+/** Baseline y for each line of a block vertically centred on cy. */
+function layout(ls: Line[], cy: number) {
+  const total = ls.reduce((h, l) => h + LINE_H[l.cls], 0);
+  let y = cy - total / 2;
+  return ls.map((l) => {
+    y += LINE_H[l.cls];
+    return { ...l, y: y - 6 };
+  });
+}
+
+function hitBox(ls: Line[], cx: number, cy: number, w: number) {
+  const h = ls.reduce((s, l) => s + LINE_H[l.cls], 0) + 12;
+  return { x: cx - w / 2, y: cy - h / 2, width: w, height: h };
+}
+
+interface Placed {
+  slot: YantraSlot;
+  layer: YantraLayer;
+  lines: ReturnType<typeof layout>;
+  cx: number;
+  anchor?: 'start' | 'middle' | 'end';
+  hit: { x: number; y: number; width: number; height: number };
+  shape?: string;
+}
+
+const placed: Placed[] = [];
+
+// Trikoṇa: Devatā and Grantha along the top edge, Paramparā near the lower point.
+const tri = layer('trikona');
+if (tri) {
+  const pos = [
+    { cx: C.x - 66, cy: C.y - 50 },
+    { cx: C.x + 66, cy: C.y - 50 },
+    { cx: C.x, cy: C.y + 74 },
+  ];
+  tri.slots.forEach((s, i) => {
+    const p = pos[i]!;
+    const ls = lines(s, 'iast');
+    placed.push({ slot: s, layer: tri, lines: layout(ls, p.cy), cx: p.cx, hit: hitBox(ls, p.cx, p.cy, 118) });
+  });
+}
+
+// Aṣṭadala: one petal per slot, clockwise from the top in list order.
+const dala = layer('astadala');
+if (dala) {
+  dala.slots.forEach((s, i) => {
+    const deg = angleOf(i, dala.slots.length);
+    const [cx, cy] = polar(R.petalLabel, deg);
+    const ls = lines(s, 'iast');
+    placed.push({ slot: s, layer: dala, lines: layout(ls, cy), cx, hit: hitBox(ls, cx, cy, 120), shape: petalPath(deg) });
+  });
+}
+
+// Ten directions: clockwise from the top in list order (positions are not directions).
+const disa = layer('dasa-disa');
+if (disa) {
+  disa.slots.forEach((s, i) => {
+    const [cx, cy] = polar(R.ringLabel, angleOf(i, disa.slots.length));
+    const ls = lines(s, 'iast');
+    placed.push({ slot: s, layer: disa, lines: layout(ls, cy), cx, hit: hitBox(ls, cx, cy, 150) });
+  });
+}
+
+// Bhūpura gates: top, right, bottom, left.
+const bhu = layer('bhupura');
+if (bhu) {
+  const outer = R.squareOuter + R.gateDepth;
+  const gates = [
+    { cx: C.x, cy: C.y - outer - 32, anchor: 'middle' as const },
+    { cx: C.x + outer + 12, cy: C.y, anchor: 'start' as const },
+    { cx: C.x, cy: C.y + outer + 34, anchor: 'middle' as const },
+    { cx: C.x - outer - 12, cy: C.y, anchor: 'end' as const },
+  ];
+  bhu.slots.forEach((s, i) => {
+    const g = gates[i]!;
+    const ls = lines(s, 'en');
+    const w = 170;
+    const hx = g.anchor === 'start' ? g.cx + w / 2 - 6 : g.anchor === 'end' ? g.cx - w / 2 + 6 : g.cx;
+    placed.push({ slot: s, layer: bhu, lines: layout(ls, g.cy), cx: g.cx, anchor: g.anchor, hit: hitBox(ls, hx, g.cy, w) });
+  });
+}
+
+const bindu = layer('bindu');
+const binduSlot = bindu?.slots[0];
+const vrtta = layer('vrtta');
+const vrttaSlot = vrtta?.slots[0];
+const vrttaText = vrttaSlot ? [vrttaSlot.label_en, vrttaSlot.label_hi, vrtta?.label_sa].filter(Boolean).join('  ·  ') : '';
+
+const lineShapes = {
+  bhupuraOuter: bhupuraPath(R.squareOuter, R.gateHalf, R.gateDepth),
+  bhupuraInner: bhupuraPath(R.squareInner, R.gateHalf - 16, R.gateDepth - 16),
+};
+---
+<svg
+  class="yantra-svg"
+  viewBox={`0 0 ${VIEW.width} ${VIEW.height}`}
+  role="group"
+  aria-labelledby="yantra-svg-title"
+  data-yantra
+  data-pagefind-ignore="all"
+>
+  <title id="yantra-svg-title">Yantra-form map / यंत्र-रूप मानचित्र</title>
+  <defs>
+    <path id="yantra-vrtta-arc" d={upperArc(R.vrttaLabel)} />
+    <radialGradient id="yantra-glow">
+      <stop offset="0" stop-color="var(--glow-strong)" />
+      <stop offset="1" stop-color="var(--glow-strong)" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <circle cx={C.x} cy={C.y} r={R.vrttaOuter} fill="url(#yantra-glow)" />
+
+  <g class="lines" aria-hidden="true">
+    <path class="draw" pathLength="1" d={lineShapes.bhupuraOuter} />
+    <path class="draw thin" pathLength="1" d={lineShapes.bhupuraInner} />
+    <circle class="draw" pathLength="1" cx={C.x} cy={C.y} r={R.vrttaOuter} />
+    <circle class="draw" pathLength="1" cx={C.x} cy={C.y} r={R.vrttaInner} />
+    <circle class="draw thin" pathLength="1" cx={C.x} cy={C.y} r={R.ringOuter} />
+    <circle class="draw thin" pathLength="1" cx={C.x} cy={C.y} r={R.ringInner} />
+    <circle class="draw thin" pathLength="1" cx={C.x} cy={C.y} r={R.petalBase} />
+    <polygon class="draw" pathLength="1" points={trianglePoints()} />
+  </g>
+
+  {/* Source order = keyboard order: from the bindu outward, as the map is read. */}
+  {binduSlot && bindu && (
+    <a href={slotHref(binduSlot)} aria-label={slotName(binduSlot, bindu, binduSlot.label_sa ?? binduSlot.label_hi ?? '')} class:list={['slot', `slot--${binduSlot.status}`]}>
+      <circle class="slot__hit" cx={C.x} cy={C.y + 10} r="34" />
+      <circle class="bindu" cx={C.x} cy={C.y - 4} r={R.bindu} />
+      <text text-anchor="middle"><tspan x={C.x} y={C.y + 32} lang="sa" class="dev">{binduSlot.label_sa ?? binduSlot.label_hi}</tspan></text>
+    </a>
+  )}
+  {placed.filter((p) => p.layer.id !== 'bhupura').map((p) => (
+    <a href={slotHref(p.slot)} aria-label={slotName(p.slot, p.layer, p.lines.map((l) => l.text).join(' '))} class:list={['slot', `slot--${p.slot.status}`]}>
+      {p.shape ? (
+        <path class="slot__shape draw" pathLength="1" d={p.shape} />
+      ) : (
+        <rect class="slot__hit" rx="8" {...p.hit} />
+      )}
+      <text text-anchor={p.anchor ?? 'middle'}>
+        {p.lines.map((l) => (
+          <><tspan x={p.cx} y={l.y} lang={l.lang} class={l.cls}>{l.text}</tspan>{' '}</>
+        ))}
+      </text>
+    </a>
+  ))}
+
+  {vrttaSlot && vrtta && (
+    <a href={slotHref(vrttaSlot)} aria-label={slotName(vrttaSlot, vrtta, vrttaText)} class:list={['slot', `slot--${vrttaSlot.status}`]}>
+      <circle class="slot__ring" cx={C.x} cy={C.y} r={R.vrttaLabel} />
+      <text class="lat small" text-anchor="middle"><textPath href="#yantra-vrtta-arc" startOffset="50%">{vrttaText}</textPath></text>
+    </a>
+  )}
+
+  {placed.filter((p) => p.layer.id === 'bhupura').map((p) => (
+    <a href={slotHref(p.slot)} aria-label={slotName(p.slot, p.layer, p.lines.map((l) => l.text).join(' '))} class:list={['slot', `slot--${p.slot.status}`]}>
+      {p.shape ? (
+        <path class="slot__shape draw" pathLength="1" d={p.shape} />
+      ) : (
+        <rect class="slot__hit" rx="8" {...p.hit} />
+      )}
+      <text text-anchor={p.anchor ?? 'middle'}>
+        {p.lines.map((l) => (
+          <><tspan x={p.cx} y={l.y} lang={l.lang} class={l.cls}>{l.text}</tspan>{' '}</>
+        ))}
+      </text>
+    </a>
+  ))}
+
+</svg>
+
+<style>
+  .yantra-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 62rem;
+    margin-inline: auto;
+    --glow-strong: var(--glow);
+  }
+  .lines * {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2;
+  }
+  .lines .thin {
+    stroke-width: 1;
+    opacity: 0.75;
+  }
+  .bindu {
+    fill: var(--sindura);
+  }
+  .slot__shape {
+    fill: transparent;
+    stroke: var(--gold);
+    stroke-width: 1.5;
+  }
+  .slot__hit {
+    fill: transparent;
+    stroke: none;
+  }
+  .slot__ring {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 26;
+  }
+  text {
+    fill: var(--ink);
+  }
+  .dev {
+    font-size: 25px;
+  }
+  tspan[lang='sa'] {
+    font-family: var(--font-sanskrit);
+  }
+  tspan[lang='hi'] {
+    font-family: var(--font-hindi);
+  }
+  .lat {
+    font-family: var(--font-latin);
+    font-size: 18px;
+  }
+  .small {
+    font-size: 16px;
+    letter-spacing: 0.02em;
+  }
+  .slot--in-preparation text {
+    fill: var(--ink-muted);
+  }
+  .slot--ready text {
+    fill: var(--ink);
+    font-weight: 600;
+  }
+  .slot:hover text,
+  .slot:focus-visible text {
+    fill: var(--sindura);
+  }
+  .slot:hover .slot__shape,
+  .slot:focus-visible .slot__shape {
+    stroke: var(--sindura);
+    stroke-width: 3;
+  }
+  .slot:focus-visible .slot__hit {
+    stroke: var(--sindura);
+    stroke-width: 2;
+  }
+  .slot:focus-visible .slot__ring {
+    stroke: color-mix(in srgb, var(--sindura) 25%, transparent);
+  }
+  .slot:focus {
+    outline: none;
+  }
+
+  /* The lines draw themselves once, slowly; nothing moves afterwards (concept §8.1). */
+  @media (prefers-reduced-motion: no-preference) {
+    .draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: yantra-draw 1.8s ease-out forwards;
+    }
+    .yantra-svg text {
+      opacity: 0;
+      animation: yantra-fade 0.8s ease-out 1.1s forwards;
+    }
+    @keyframes yantra-draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes yantra-fade {
+      to {
+        opacity: 1;
+      }
+    }
+  }
+</style>
