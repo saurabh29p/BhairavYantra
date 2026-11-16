@@ -21,3 +21,22 @@
   note: >-
     Read in research/02-ashta-bhairavas.md §1. The page states no source text, only
     "मूल पाठ: पारंपरिक धार्मिक स्रोत".
+
+- id: wikipedia-ashta-bhairava
+  kind: website
+  title: Ashta Bhairava (Wikipedia)
+  short: Wikipedia, "Ashta Bhairava"
+  url: https://en.wikipedia.org/wiki/Ashta_Bhairava
+  note: >-
+    Source W of the comparative table in research/02-ashta-bhairavas.md §2. Cites Gopinatha
+    Rao 1914 p. 28 and Payne & Witzel 2015, Homa Variations, p. 330, without saying which
+    claim each supports.
+
+- id: nathas-ashta-bhairava
+  kind: website
+  title: Ashta-bhairava (nathas.org dictionary)
+  short: nathas.org
+  url: https://nathas.org/en/dictionary/ashta-bhairava/
+  note: >-
+    Source N of the comparative table in research/02-ashta-bhairavas.md §2. Cites "Śiva
+    Āgamas", "Rudrayāmala" and the Śrīvidyā "Mahāṣoḍhā-nyāsa", without verse.

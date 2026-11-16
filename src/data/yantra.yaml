@@ -32,7 +32,9 @@ layers:
         The eight names as given in the listing verse read online. We have not yet found
         them in a primary text with chapter and verse. Positions on this map follow the order
         of the verse; they are not directions.
-      hi: null
+      hi: >-
+        ये आठ नाम ऑनलाइन पढ़े गए नाम-सूची श्लोक के अनुसार हैं। अभी तक हमें ये किसी मूल ग्रंथ में
+        अध्याय-श्लोक सहित नहीं मिले। इस मानचित्र पर इनके स्थान श्लोक के क्रम से हैं; ये दिशाएँ नहीं हैं।
       sources:
         - key: pavitragranth-ashtabhairava
           grade: D
@@ -47,7 +49,11 @@ layers:
         Shown in the order of the list most often given in modern scholarship, following
         David Kinsley. The order varies between texts, and the directions given in the Satī
         episode are not yet verified. Positions on this map are not directions.
-      hi: null
+      hi: >-
+        ये आधुनिक विद्वत्ता में सबसे अधिक दी जाने वाली सूची के क्रम में, डेविड किन्सले के
+        अनुसार, दिखाई गई हैं।
+        यह क्रम ग्रंथों में अलग-अलग है, और सती-प्रसंग में बताई गई दिशाओं की अभी पुष्टि नहीं हुई है।
+        इस मानचित्र पर इनके स्थान दिशाएँ नहीं हैं।
       sources:
         - key: kinsley-1997
           location: pp. ix, 1
@@ -58,7 +64,7 @@ layers:
     label_iast: Vṛtta
     label_en: Vṛtta (enclosing circles)
     holds_en: Bhairavīs and the wider Śakti world
-    holds_hi: null
+    holds_hi: भैरवियाँ और व्यापक शक्ति-जगत
   - id: bhupura
     label_sa: भूपुर
     label_iast: Bhūpura
@@ -90,12 +96,24 @@ slots:
     href: /devata/kapala/
     status: in-preparation
     variant_note:
-      en: The listing verse has कपाली (Kapālī); the comparative table in research/02 has कपाल (Kapāla).
-      hi: null
+      en: >-
+        This name appears in two forms. The listing verse has कपाली (Kapālī). The secondary
+        sources compared in our research, Wikipedia and nathas.org, have कपाल (Kapāla), the form
+        the map uses for now. Neither form has yet been found in a primary text.
+      hi: >-
+        यह नाम दो रूपों में मिलता है। नाम-सूची श्लोक में कपाली (Kapālī) है। हमारे शोध में तुलना किए
+        गए द्वितीयक स्रोतों, विकिपीडिया और nathas.org, में कपाल (Kapāla) है, और यह मानचित्र अभी यही
+        रूप दिखाता है। दोनों में से कोई भी रूप अभी किसी मूल ग्रंथ में नहीं मिला।
       sources:
         - key: pavitragranth-ashtabhairava
           grade: D
-          note: Graded D ⚠ in research/02 §1.
+          note: For कपाली. Graded D ⚠ in research/02 §1.
+        - key: wikipedia-ashta-bhairava
+          grade: ⚠
+          note: For Kapāla. research/02 §2 says no column of its table is yet confirmed from a primary text.
+        - key: nathas-ashta-bhairava
+          grade: ⚠
+          note: For Kapāla. research/02 §2 says no column of its table is yet confirmed from a primary text.
   - { slot: bhisana, layer: astadala, label_sa: भीषण, label_iast: Bhīṣaṇa, label_hi: भीषण, label_en: Bhīṣaṇa, href: /devata/bhisana/, status: in-preparation }
   - { slot: samhara, layer: astadala, label_sa: संहार, label_iast: Saṃhāra, label_hi: संहार, label_en: Saṃhāra, href: /devata/samhara/, status: in-preparation }
 
@@ -112,7 +130,7 @@ slots:
   - { slot: kamala, layer: dasa-disa, label_sa: कमला (कमलात्मिका), label_iast: Kamalā (Kamalātmikā), label_hi: कमला (कमलात्मिका), label_en: Kamalā (Kamalātmikā), href: /devata/kamala/, status: in-preparation }
 
   # Vṛtta
-  - { slot: bhairavis, layer: vrtta, label_hi: null, label_en: Bhairavīs and the wider Śakti world, href: /vrtta/, status: in-preparation }
+  - { slot: bhairavis, layer: vrtta, label_hi: भैरवियाँ और व्यापक शक्ति-जगत, label_en: Bhairavīs and the wider Śakti world, href: /vrtta/, status: in-preparation }
 
   # Bhūpura: the four gates (concept §3; Hindi from the concept's सार)
   - { slot: gate-search, layer: bhupura, label_hi: खोज, label_en: Search & A–Z index, href: /search/, status: ready }
